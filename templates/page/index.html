@@ -1,0 +1,18 @@
+<button id="upload-button">Upload File</button>
+<input type="file" style="display: none" id="upload-input">
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script>
+    $("#upload-button").on("click", function() {
+        $("#upload-input").trigger("click");
+    });
+
+    $("#upload-input").on("change", function(){
+        filename = $("#upload-input").val()
+        if(filename.includes(".jpg") || filename.includes(".png")) {
+            console.log("yas")
+        } else {
+            alert("Please provide an image in either .jpg or .png format.")
+        }
+    })
+</script>

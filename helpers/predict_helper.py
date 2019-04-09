@@ -5,6 +5,8 @@ import os
 from keras import backend as k
 import uuid
 from keras.models import Sequential
+from PIL import Image
+from resizeimage import resizeimage
 
 class PredictHelper:
     def __init__(self):
@@ -21,15 +23,20 @@ class PredictHelper:
 
     def reshape_image(self, image):
         # reshape the image for the network and return it
-        # TODO: make reshape size dependent on the model, or a variable
-        image_name = uuid.uuid4()
-        image.save('temp/' + str(image_name) + '.png')
-        image = io.imread('temp/' + str(image_name) + '.png', as_gray=False)
+        image_path = 'static/img/cache/' + str(uuid.uuid4()) + '.png'
+        image.save(image_path)
+
+        with open(image_path, 'r+b') as f:
+            with Image.open(f) as image:
+                cover = resizeimage.resize_cover(image, [224, 224])
+                cover.save(image_path, image.format)
+
+        image = io.imread(image_path, as_gray=False)
         image = image.astype('float32')
         image = image / 255
         image = image.reshape(-1, 224, 224, 3)
-        os.remove('temp/' + str(image_name) + '.png')
-        return image
+
+        return image, image_path
 
     def clear_session(self):
         if k.clear_session():

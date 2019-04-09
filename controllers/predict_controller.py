@@ -5,6 +5,7 @@ from flask import abort
 
 predict_controller = Blueprint('predict_controller', __name__)
 
+# TODO: find some better way to do this, it annoyes me...
 classes = [
     'Cox',
     'Elstar',
@@ -29,12 +30,12 @@ def page_index():
         image = helper.reshape_image(image)
 
         # make a prediction and make a collection for every item in it
-        raw_prediction = model.predict_classes(image)
+        raw_prediction = model.predict_classes(image[0])
 
         # clear the Keras session
         helper.clear_session()
 
-        return jsonify(classes[raw_prediction[0]])
+        return jsonify(classes[raw_prediction[0]], image[1])
     except FileNotFoundError:
         abort(404)
     except ValueError:

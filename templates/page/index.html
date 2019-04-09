@@ -40,7 +40,8 @@
 
             $.ajax(settings).done(function(response){
                 let decodedResponse = JSON.parse(response)
-                document.getElementById("result").innerHTML = decodedResponse
+                // console.log(fileLocation)
+                document.getElementById("result").innerHTML = "<p>" + decodedResponse[0] + "</p><br><img src='" + decodedResponse[1] + "'>"
             })
         }
     }

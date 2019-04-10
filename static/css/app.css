@@ -1,0 +1,52 @@
+#logo {
+    width: 100px;
+}
+
+.icon {
+    font-size: 200px;
+
+}
+
+.navbar-dark .navbar-toggler {
+    color: red;
+    border-color: #EEA59C;
+}
+
+.bg-dark {
+    background-color: #dd4b39 !important;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.result {
+    margin-top: 50px;
+}
+
+.main {
+    margin-top: 50px;
+}
+
+.camera:hover {
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #dd4b39 !important;
+}
+
+.spinner {
+    margin-top: 40%;
+}

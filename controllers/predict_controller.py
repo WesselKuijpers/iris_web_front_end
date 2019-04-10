@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, request, jsonify
 from flask import render_template
 from helpers import predict_helper
 from flask import abort
+from flask import current_app as app
 
 predict_controller = Blueprint('predict_controller', __name__)
 
@@ -21,10 +22,10 @@ def page_index():
         helper = predict_helper.PredictHelper()
         # clear the Keras session
         helper.clear_session()
-        
+
         # get the actual model from the local storage by the location in the model object
         model = helper.load_model('iris_core/densenet.h5py')
-        
+
         # get and reshape the image from the form data
         image = request.files['image']
         image = helper.reshape_image(image)
@@ -39,7 +40,9 @@ def page_index():
     except FileNotFoundError:
         abort(404)
     except ValueError:
+        # raise
         abort(500)
     except:
+        # raise
         abort(503)
         

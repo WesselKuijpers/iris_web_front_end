@@ -1,16 +1,103 @@
-<button id="upload-button">Make Prediction</button>
+<!-- <button id="upload-button">Make Prediction</button>
 <input type="file" style="display: none" id="upload-input">
-<p id="result"></p>
+<p id="result"></p> -->
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- responsieve -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+
+<body>
+    <div class="pos-f-t">
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-dark p-4">
+                <h5 class="text-white h4">Stachanov</h5>
+                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="#">About iris</a>
+                <a class="nav-link" href="#">Contact</a>
+            </div>
+        </div>
+        <nav class="navbar navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="main" id='main'>
+            <div class="row">
+                <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
+                    <i class="icon fas fa-camera-retro camera" id='upload-button'></i>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
+                <h3>
+                    Tap me to upload your photo!
+                </h3>
+            </div>
+            <input type="file" style="display: none" id="upload-input">
+        </div>
+
+        <div class="spinner hidden" id='spinner'>
+                <div class="row">
+                    <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
+                        <img src="{{ url_for('static', filename='img/spinner.gif') }}" class="img-fluid">
+                    </div>
+                </div>
+        </div>
+
+        <div class="result hidden" id="result">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center" id='result-img'></div>
+            </div>
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
+                <h4 id='result-text'></h4>
+            </div>
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
+                <h3>
+                    <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
+                </h3>
+            </div>
+        </div>
+    </div>
+</body>
+
 <script>
-    $("#upload-button").on("click", function() {
+    $("#upload-button").on("click", function () {
         $("#upload-input").trigger("click");
     });
 
-    $("#upload-input").on("change", function(){
+    $("#upload-input").on("change", function () {
         filename = $("#upload-input").val()
-        if(filename.includes(".jpg") || filename.includes(".png")) {
+        if (filename.includes(".jpg") || filename.includes(".png")) {
             sendData()
         } else {
             alert("Please provide an image in either .jpg or .png format.")
@@ -18,7 +105,9 @@
     })
 
     function sendData() {
-        document.getElementById("result").innerHTML = "<img src='{{ url_for('static', filename='img/spinner.gif') }}'>"
+        document.getElementById('main').classList.add("hidden")
+        document.getElementById('spinner').classList.remove("hidden")
+
 
         let input = document.getElementById('upload-input')
         let files = input.files
@@ -38,11 +127,28 @@
             formData.append("image", files[0])
             settings.data = formData
 
-            $.ajax(settings).done(function(response){
-                let decodedResponse = JSON.parse(response)
-                // console.log(fileLocation)
-                document.getElementById("result").innerHTML = "<p>" + decodedResponse[0] + "</p><br><img src='" + decodedResponse[1] + "'>"
-            })
+            $.ajax(settings)
+                .done(function (response) {
+                    let decodedResponse = JSON.parse(response)
+
+                    document.getElementById('result-img').innerHTML = "<img src='" + decodedResponse[1] + "'>"
+                    document.getElementById('result-text').innerHTML = decodedResponse[0]
+
+                    document.getElementById('spinner').classList.add('hidden')
+                    document.getElementById('result').classList.remove('hidden')
+                })
+                .fail(function () {
+                    alert("An error occured")
+                    reset()
+                })
         }
     }
+
+    function reset() {
+        document.getElementById('spinner').classList.add("hidden")
+        document.getElementById("result").classList.add("hidden")
+        document.getElementById("main").classList.remove("hidden")
+    }
 </script>
+
+</html>

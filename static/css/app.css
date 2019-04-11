@@ -10,6 +10,7 @@
 .navbar-dark .navbar-toggler {
     color: red;
     border-color: #EEA59C;
+    border-radius: 0 !important;
 }
 
 .bg-dark {
@@ -49,4 +50,8 @@ a:hover {
 
 .spinner {
     margin-top: 40%;
+}
+
+.btn {
+    border-radius: 0 !important;
 }

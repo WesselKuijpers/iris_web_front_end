@@ -7,6 +7,7 @@ import uuid
 from keras.models import Sequential
 from PIL import Image
 from resizeimage import resizeimage
+import tensorflow as tf
 
 class PredictHelper:
     def __init__(self):
@@ -39,7 +40,4 @@ class PredictHelper:
         return image, image_path
 
     def clear_session(self):
-        if k.clear_session():
-            return True
-        else:
-            return False
+        k.clear_session()

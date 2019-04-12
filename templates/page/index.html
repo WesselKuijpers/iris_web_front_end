@@ -85,17 +85,23 @@
                     <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
                 </h3>
             </div>
-            <div class="input-group mb-3">
+            <div class="input-group mb-3" id='result-form'>
                     <div class="input-group-prepend">
                       <label class="input-group-text" for="inputGroupSelect01">Options</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
+                    <select class="custom-select" id="inputGroupSelect01" onchange="showForm(this)">
                       <option selected>has worked?</option>
-                      <option value="1">Yes</option>
-                      <option value="2">No</option>
+                      <option value=1>Yes</option>
+                      <option value=2>No</option>
                     </select>
                 </div>
-           </div>
+            </div>
+            <div id='result-positive' class="hidden">
+                pos
+            </div>
+            <div id='result-negative' class="hidden">
+                neg
+            </div>
         </div>
 
         
@@ -114,6 +120,17 @@
             alert("Please provide an image in either .jpg or .png format.")
         }
     })
+
+    function showForm(elem) {
+        document.getElementById('result-form').classList.add('hidden')
+        if (elem.value == 1) {
+            document.getElementById('result-positive').classList.remove('hidden')
+        } else if (elem.value == 2) {
+            document.getElementById('result-negative').classList.remove('hidden')
+        } else {
+            alert("Please select a value")
+        }
+    }
 </script>
 
 </html>

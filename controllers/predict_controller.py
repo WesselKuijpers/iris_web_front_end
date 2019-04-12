@@ -38,5 +38,4 @@ def predict_index():
     except ValueError:
         abort(500)
     except:
-        raise
-        # abort(503)
+        abort(503)

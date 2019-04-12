@@ -1,19 +1,26 @@
-from keras.models import load_model
-import tensorflow as tf
-import skimage.io as io
 import os
-from keras import backend as k
 import uuid
-from keras.models import Sequential
+
+import skimage.io as io
+import tensorflow as tf
+from keras import backend as k
+from keras.models import Sequential, load_model
 from PIL import Image
 from resizeimage import resizeimage
+
 
 class PredictHelper:
     def __init__(self):
         self.model = None
+        self.graph = None
 
     def load_model(self, model_path):
-        # get model from local storage and return it
+        # set the graph
+        global graph
+        graph = tf.get_default_graph()
+        self.graph = graph
+
+        # get the model from storage and return it
         model = load_model(model_path)
         seq = Sequential()
         seq.add(model)
@@ -22,15 +29,17 @@ class PredictHelper:
         return seq
 
     def reshape_image(self, image):
-        # reshape the image for the network and return it
+        # save the image from the request
         image_path = 'static/img/cache/' + str(uuid.uuid4()) + '.png'
         image.save(image_path)
 
+        # resize the saved image and save it again
         with open(image_path, 'r+b') as f:
             with Image.open(f) as image:
                 cover = resizeimage.resize_cover(image, [224, 224])
                 cover.save(image_path, image.format)
 
+        # read the image as a numpy array
         image = io.imread(image_path, as_gray=False)
         image = image.astype('float32')
         image = image / 255
@@ -39,7 +48,4 @@ class PredictHelper:
         return image, image_path
 
     def clear_session(self):
-        if k.clear_session():
-            return True
-        else:
-            return False
+        k.clear_session()

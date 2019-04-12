@@ -52,6 +52,7 @@
     </div>
 
     <div class="container">
+        <!-- main page -->
         <div class="main" id='main'>
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
@@ -66,6 +67,7 @@
             <input type="file" style="display: none" id="upload-input">
         </div>
 
+        <!-- spinner page -->
         <div class="spinner hidden" id='spinner'>
                 <div class="row">
                     <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
@@ -74,6 +76,7 @@
                 </div>
         </div>
 
+        <!-- result page -->
         <div class="result hidden" id="result">
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center" id='result-img'></div>
@@ -86,8 +89,20 @@
                     <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
                 </h3>
             </div>
+            <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                      <option selected>has worked?</option>
+                      <option value="1">Yes</option>
+                      <option value="2">No</option>
+                    </select>
+                </div>
+           </div>
         </div>
-    </div>
+
+        
 </body>
 
 <script>

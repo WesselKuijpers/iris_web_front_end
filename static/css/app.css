@@ -8,8 +8,8 @@
 }
 
 .navbar-dark .navbar-toggler {
-    color: red;
-    border-color: #EEA59C;
+    color: white;
+    border-color: transparent !important;
     border-radius: 0 !important;
 }
 
@@ -54,4 +54,8 @@ a:hover {
 
 .btn {
     border-radius: 0 !important;
+}
+
+.menu-icon {
+    font-size: 35px;
 }

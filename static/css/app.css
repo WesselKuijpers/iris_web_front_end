@@ -17,11 +17,11 @@
     background-color: #dd4b39 !important;
 }
 
-a {
+/* a {
     color: white;
     text-decoration: none;
     background-color: transparent;
-}
+} */
 
 a:hover {
     color: #000000;

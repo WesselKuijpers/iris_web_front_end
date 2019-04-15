@@ -90,17 +90,31 @@
                       <label class="input-group-text" for="inputGroupSelect01">Options</label>
                     </div>
                     <select class="custom-select" id="inputGroupSelect01" onchange="showForm(this)">
-                      <option selected>has worked?</option>
+                      <option selected>Did it work?</option>
                       <option value=1>Yes</option>
                       <option value=2>No</option>
                     </select>
                 </div>
             </div>
             <div id='result-positive' class="hidden">
-                pos
+                <h2 style="text-align: center;">Thank you!</h2>
             </div>
             <div id='result-negative' class="hidden">
-                neg
+                    <div class="input-group mb-3">
+                            <select class="custom-select" id="inputGroupSelect02"  onchange="showMessage(this)">
+                              <option selected>choose the type of apple?</option>
+                              <option value="1">Cox</option>
+                              <option value="2">Elstar</option>
+                              <option value="3">Golden delicious</option>
+                              <option value="4">Granny smith</option>
+                              <option value="5">Nashi pear</option>
+                              <option value="6">Pink lady</option>
+                            </select>
+                            <div class="input-group-append">
+                              <label class="input-group-text" for="inputGroupSelect02">Options</label>
+                            </div>
+                          </div>
+                
             </div>
         </div>
 
@@ -131,6 +145,14 @@
             alert("Please select a value")
         }
     }
+
+    function showMessage() {
+        document.getElementById('result-negative').innerHTML = "<h2 style='text-align: center;'>Thank you!<h2>";
+            
+
+
+    
+}
 </script>
 
 </html>

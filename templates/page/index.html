@@ -95,18 +95,5 @@
         function showMessage() {
             document.getElementById('result-negative').innerHTML = "<h2 style='text-align: center;'>Thank you!<h2>";
         }
-
-        $("#upload-button").on("click", function () {
-            $("#upload-input").trigger("click");
-        }); 
-
-        $("#upload-input").on("change", function () {
-            filename = $("#upload-input").val()
-            if (filename.includes(".jpg") || filename.includes(".png")) {
-                sendData()
-            } else {
-                alert("Please provide an image in either .jpg or .png format.")
-            }
-        })
     </script>
 {% endblock %}

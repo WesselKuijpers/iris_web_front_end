@@ -42,7 +42,7 @@ function reset() {
     document.getElementById('spinner').classList.add("hidden")
     document.getElementById("result").classList.add("hidden")
     document.getElementById("main").classList.remove("hidden")
-    document.getElementById('result-form').classList.add('hidden')
+    document.getElementById('result-form').classList.remove('hidden')
     document.getElementById('result-negative').classList.add('hidden')
     document.getElementById('result-positive').classList.add('hidden')
 }

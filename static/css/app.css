@@ -17,12 +17,6 @@
     background-color: #dd4b39 !important;
 }
 
-/* a {
-    color: white;
-    text-decoration: none;
-    background-color: transparent;
-} */
-
 a:hover {
     color: #000000;
     text-decoration: underline;
@@ -48,6 +42,10 @@ a:hover {
     background-color: #dd4b39 !important;
 }
 
+.btn-danger:hover {
+    background-color: #cc4333 !important;
+}
+
 .spinner {
     margin-top: 40%;
 }
@@ -58,4 +56,8 @@ a:hover {
 
 .menu-icon {
     font-size: 35px;
+}
+
+select {
+    border-radius: 0 !important;
 }

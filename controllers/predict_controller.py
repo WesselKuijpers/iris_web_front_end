@@ -39,3 +39,7 @@ def predict_index():
         abort(500)
     except:
         abort(503)
+
+@predict_controller.route('/save', methods=['POST'])
+def predict_save():
+    return jsonify({request.headers['category'], request.headers['location']})

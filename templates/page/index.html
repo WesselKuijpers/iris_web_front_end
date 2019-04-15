@@ -1,100 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <!-- main page -->
-        <div class="main" id='main'>
-            <div class="row">
-                <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
-                    <i class="icon fas fa-camera-retro camera" id='upload-button'></i>
-                </div>
-            </div>
-            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
-                <h3>Tap to upload photo</h3>
-            </div>
-            <input type="file" style="display: none" id="upload-input">
-        </div>
-
-        <!-- spinner page -->
-        <div class="spinner hidden" id='spinner'>
-            <div class="row">
-                <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
-                    <img src="{{ url_for('static', filename='img/spinner.gif') }}" class="img-fluid">
-                </div>
+<div class="container">
+    <!-- main page -->
+    <div class="main" id='main'>
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
+                <i class="icon fas fa-camera-retro camera" id='upload-button'></i>
             </div>
         </div>
+        <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
+            <h3>Tap to upload photo</h3>
+        </div>
+        <input type="file" style="display: none" id="upload-input">
+    </div>
 
-        <!-- result page -->
-        <div class="result hidden" id="result">
-            <div class="row">
-                <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center" id='result-img'></div>
+    <!-- spinner page -->
+    <div class="spinner hidden" id='spinner'>
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
+                <img src="{{ url_for('static', filename='img/spinner.gif') }}" class="img-fluid">
             </div>
+        </div>
+    </div>
+
+    <!-- result page -->
+    <div class="result hidden" id="result">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center" id='result-img'></div>
+        </div>
+        <div class="row">
             <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
                 <h4 id='result-text'></h4>
             </div>
+        </div>
+        <div class="row">
             <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
                 <h3>
                     <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
                 </h3>
             </div>
-            <div class="input-group mb-3" id='result-form'>
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">Options</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01" onchange="showForm(this)">
-                      <option selected>Did it work?</option>
-                      <option value=1>Yes</option>
-                      <option value=2>No</option>
+        </div>
+        <br>
+        <hr>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h5>Help us out?</h5>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="input-group mb-3" id='result-form'>
+                    <select class="custom-select" id="binary-select" onchange="showForm(this)">
+                        <option selected>Did it work?</option>
+                        <option value=1>Yes</option>
+                        <option value=2>No</option>
                     </select>
                 </div>
             </div>
-            <div id='result-positive' class="hidden">
-                <h2 style="text-align: center;">Thank you!</h2>
-            </div>
-            <div id='result-negative' class="hidden">
-                <div class="input-group mb-3">
-                     <select class="custom-select" id="inputGroupSelect02"  onchange="showMessage(this)">
-                         <option selected>choose the type of apple?</option>
-                         <option value="1">Cox</option>
-                         <option value="2">Elstar</option>
-                         <option value="3">Golden delicious</option>
-                         <option value="4">Granny smith</option>
-                         <option value="5">Nashi pear</option>
-                         <option value="6">Pink lady</option>
-                     </select>
-                 <div class="input-group-append">
-                 <label class="input-group-text" for="inputGroupSelect02">Options</label>
-             </div>
-         </div>     
-     </div>
-    <script>
-        $("#upload-button").on("click", function () {
-            $("#upload-input").trigger("click");
-        });
+        </div>
+    </div>
+    <div id='result-positive' class="hidden">
+        <h3 style="text-align: center;">Thank you!</h3>
+    </div>
+    <div id='result-negative' class="hidden">
+        <div class="input-group mb-3">
+            <select class="custom-select" id="categorical-select" onchange="showMessage(this)">
+                <option selected>choose the type of apple?</option>
+                <option value="cox">Cox</option>
+                <option value="elstar">Elstar</option>
+                <option value="golden_delicious">Golden Delicious</option>
+                <option value="granny_smith">Granny Smith</option>
+                <option value="nashi_pear">Nashi Pear</option>
+                <option value="pink_lady">Pink Lady</option>
+            </select>
+        </div>
+    </div>
+</div>
+<form id='quiz-form'>
+    <input type="hidden" id='category'>
+    <input type="hidden" id='location'>
+</form>
+<script>
+    $("#upload-button").on("click", function () {
+        $("#upload-input").trigger("click");
+    });
 
-        $("#upload-input").on("change", function () {
-            filename = $("#upload-input").val()
-            if (filename.includes(".jpg") || filename.includes(".png")) {
-                sendData()
-            } else {
-                alert("Please provide an image in either .jpg or .png format.")
-            }
-        })
-
-        function showForm(elem) {
-            document.getElementById('result-form').classList.add('hidden')
-            if (elem.value == 1) {
-                document.getElementById('result-positive').classList.remove('hidden')
-            } else if (elem.value == 2) {
-                document.getElementById('result-negative').classList.remove('hidden')
-            } else {
-                alert("Please select a value")
-            }
-            elem.selectedIndex = 0
+    $("#upload-input").on("change", async function () {
+        filename = $("#upload-input").val()
+        if (filename.includes(".jpg") || filename.includes(".png")) {
+            result = await sendPredictData()
+            fillForm(result)
+        } else {
+            alert("Please provide an image in either .jpg or .png format.")
         }
-
-        function showMessage() {
-            document.getElementById('result-negative').innerHTML = "<h2 style='text-align: center;'>Thank you!<h2>";
-        }
-    </script>
+    })
+</script>
 {% endblock %}

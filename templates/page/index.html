@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="container">
+        <!-- main page -->
         <div class="main" id='main'>
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
@@ -14,6 +15,7 @@
             <input type="file" style="display: none" id="upload-input">
         </div>
 
+        <!-- spinner page -->
         <div class="spinner hidden" id='spinner'>
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center">
@@ -22,6 +24,7 @@
             </div>
         </div>
 
+        <!-- result page -->
         <div class="result hidden" id="result">
             <div class="row">
                 <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center" id='result-img'></div>
@@ -34,13 +37,68 @@
                     <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
                 </h3>
             </div>
-        </div>
-    </div>
-
+            <div class="input-group mb-3" id='result-form'>
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01" onchange="showForm(this)">
+                      <option selected>Did it work?</option>
+                      <option value=1>Yes</option>
+                      <option value=2>No</option>
+                    </select>
+                </div>
+            </div>
+            <div id='result-positive' class="hidden">
+                <h2 style="text-align: center;">Thank you!</h2>
+            </div>
+            <div id='result-negative' class="hidden">
+                <div class="input-group mb-3">
+                     <select class="custom-select" id="inputGroupSelect02"  onchange="showMessage(this)">
+                         <option selected>choose the type of apple?</option>
+                         <option value="1">Cox</option>
+                         <option value="2">Elstar</option>
+                         <option value="3">Golden delicious</option>
+                         <option value="4">Granny smith</option>
+                         <option value="5">Nashi pear</option>
+                         <option value="6">Pink lady</option>
+                     </select>
+                 <div class="input-group-append">
+                 <label class="input-group-text" for="inputGroupSelect02">Options</label>
+             </div>
+         </div>     
+     </div>
     <script>
         $("#upload-button").on("click", function () {
             $("#upload-input").trigger("click");
         });
+
+        $("#upload-input").on("change", function () {
+            filename = $("#upload-input").val()
+            if (filename.includes(".jpg") || filename.includes(".png")) {
+                sendData()
+            } else {
+                alert("Please provide an image in either .jpg or .png format.")
+            }
+        })
+
+        function showForm(elem) {
+            document.getElementById('result-form').classList.add('hidden')
+            if (elem.value == 1) {
+                document.getElementById('result-positive').classList.remove('hidden')
+            } else if (elem.value == 2) {
+                document.getElementById('result-negative').classList.remove('hidden')
+            } else {
+                alert("Please select a value")
+            }
+        }
+
+        function showMessage() {
+            document.getElementById('result-negative').innerHTML = "<h2 style='text-align: center;'>Thank you!<h2>";
+        }
+
+        $("#upload-button").on("click", function () {
+            $("#upload-input").trigger("click");
+        }); 
 
         $("#upload-input").on("change", function () {
             filename = $("#upload-input").val()

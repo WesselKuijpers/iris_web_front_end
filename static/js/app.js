@@ -1,4 +1,5 @@
 function sendPredictData() {
+    console.log("gothere")
     document.getElementById('main').classList.add("hidden")
     document.getElementById('spinner').classList.remove("hidden")
 
@@ -48,6 +49,7 @@ function reset() {
     document.getElementById('result-form').classList.remove('hidden')
     document.getElementById('result-negative').classList.add('hidden')
     document.getElementById('result-positive').classList.add('hidden')
+    document.getElementById('upload-input').value = ""
 }
 
 function showForm(elem) {
@@ -69,9 +71,9 @@ function showMessage(elem) {
 }
 
 function fillForm(data) {
-    console.log(data)
-    document.getElementById('category').value = data[0]
-    document.getElementById('location').value = data[1]
+    newData = JSON.parse(data)
+    document.getElementById('category').value = newData[0]
+    document.getElementById('location').value = newData[1]
 }
 
 function sendSaveData() {
@@ -92,10 +94,12 @@ function sendSaveData() {
     formData.append("location", loc)
     settings.data = formData
 
-    console.log(settings.data)
-
-    $.ajax(settings).success(function (response) {
-        console.log(response)
-        document.getElementById('result-positive').classList.remove('hidden')        
+    $.ajax(settings)
+    .success(function () {
+        document.getElementById('result-positive').classList.remove('hidden')
+    })
+    .fail(function () {
+        alert("Something went wrong, please try again later")
+        reset()
     })
 }

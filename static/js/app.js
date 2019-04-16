@@ -1,4 +1,5 @@
-function sendData() {
+
+function sendPredictData() {
     document.getElementById('main').classList.add("hidden")
     document.getElementById('spinner').classList.remove("hidden")
 

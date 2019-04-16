@@ -1,6 +1,8 @@
 from flask import Blueprint, Flask, abort
 from flask import current_app as app
 from flask import jsonify, render_template, request
+import shutil
+import os
 
 from helpers import predict_helper
 
@@ -39,3 +41,19 @@ def predict_index():
         abort(500)
     except:
         abort(503)
+
+@predict_controller.route('/save', methods=['POST'])
+def predict_save():
+    absolute_category = request.form['category'].replace(' ', '_').lower()
+    name = request.form['location'].replace('static/img/cache/', '')
+    train_path = 'dataset/train/' + absolute_category + '/'
+    test_path = 'dataset/test/' + absolute_category + '/'
+
+    if (len(os.listdir(train_path)) >= 10 and len(os.listdir(train_path)) % 10 == 0):
+        path = test_path + name
+    else:
+        path = train_path + name
+    
+    os.rename(request.form['location'], path)
+
+    return jsonify({path: path})

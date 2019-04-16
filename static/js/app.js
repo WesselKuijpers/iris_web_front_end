@@ -50,6 +50,7 @@ function reset() {
     document.getElementById('result-negative').classList.add('hidden')
     document.getElementById('result-positive').classList.add('hidden')
     document.getElementById('upload-input').value = ""
+    document.getElementById('categorical-select').classList.remove('hidden')
 }
 
 function showForm(elem) {
@@ -62,6 +63,14 @@ function showForm(elem) {
         alert("Please select a value")
     }
     elem.selectedIndex = 0
+}
+
+function negativeHandler(elem) {
+    target = document.getElementById('categorical-select')
+    target.value = elem.value
+    sendSaveData()
+    target.classList.add("hidden")
+    target.selectedIndex = 0
 }
 
 function showMessage(elem) {

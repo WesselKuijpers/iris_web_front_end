@@ -20,13 +20,13 @@ app.helper.load_model('fruit_iris_core/densenet.h5py')
 print("MODEL LOADED")
 
 # cleanup cached files
-path = 'static/img/cache/'
-filelist = os.listdir(path)
-for f in filelist:
-    os.remove(os.path.join(path, f))
-    print("FILE '" + path + f + "' DESTROYED")
+# path = 'static/img/cache/'
+# filelist = os.listdir(path)
+# for f in filelist:
+#     os.remove(os.path.join(path, f))
+#     print("FILE '" + path + f + "' DESTROYED")
 
-print("FILECACHE: EMPTY")
+# print("FILECACHE: EMPTY")
 
 # register the blueprints
 # TODO: find some dynamic way to do this

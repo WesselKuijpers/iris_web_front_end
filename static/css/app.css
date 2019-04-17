@@ -17,12 +17,6 @@
     background-color: #dd4b39 !important;
 }
 
-/* a {
-    color: white;
-    text-decoration: none;
-    background-color: transparent;
-} */
-
 a:hover {
     color: #000000;
     text-decoration: underline;
@@ -46,6 +40,10 @@ a:hover {
 
 .btn-danger {
     background-color: #dd4b39 !important;
+}
+
+.btn-danger:hover {
+    background-color: #cc4333 !important;
 }
 
 .spinner {
@@ -114,4 +112,8 @@ label:hover ~ label {
 
 input[type="radio"]:checked ~ label {
   color: orange;
+}
+
+select {
+    border-radius: 0 !important;
 }

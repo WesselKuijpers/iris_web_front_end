@@ -1,6 +1,5 @@
 import os
 
-import keras.backend as K
 import tensorflow as tf
 from flask import Blueprint, Flask, g
 

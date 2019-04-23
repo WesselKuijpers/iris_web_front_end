@@ -7,10 +7,15 @@ from keras import backend as k
 from keras.models import Sequential, load_model
 from PIL import Image
 from resizeimage import resizeimage
+import keras.backend as K
 
 
 class PredictHelper:
     def __init__(self):
+        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6, allow_growth=True)
+        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+        K.set_session(sess)
+
         self.model = None
         self.graph = None
 

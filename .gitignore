@@ -108,3 +108,4 @@ venv.bak/
 
 /static/img/cache/*
 /dataset/*/*/*
+/fruit_iris_core/models/*

@@ -88,7 +88,12 @@
 
     $("#upload-input").on("change", async function () {
         filename = $("#upload-input").val()
-        if (filename.includes(".jpg") || filename.includes(".png")) {
+        if (filename.includes(".jpg") || 
+            filename.includes(".png") || 
+            filename.includes(".jpeg") || 
+            filename.includes(".JPG") || 
+            filename.includes(".PNG") || 
+            filename.includes(".JPEG")) {
             result = await sendPredictData()
             fillForm(result)
         } else {

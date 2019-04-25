@@ -1,41 +1,30 @@
-import os
-
+from fruit_iris_core.boot.server import Server
+from fruit_iris_core.boot.trainer import Trainer
+import multiprocessing as mp
+from keras import backend as K
 import tensorflow as tf
-from flask import Blueprint, Flask, g
 
-from controllers.page_controller import page_controller
-from controllers.predict_controller import predict_controller
-from controllers.rate_controller import rate_controller
-from fruit_iris_core.error_handler import ErrorHandler
-from helpers.predict_helper import PredictHelper
+# this file covers everything that needs to happen only once
 
-app = Flask(__name__)
 
-#TODO: move all the following into some some class in fruit_iris_core and call the methods here for this is too messy
+# configuring the Tensorflow option to consume only a limited amount of GPU memory
+# pass it to keras as the current session
+# this is done to prevent OOM errors
+gpu_options = tf.GPUOptions(
+    per_process_gpu_memory_fraction=0.8, allow_growth=True)
+sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+K.set_session(sess)
 
-# pre-load the helper class / model
-app.helper = PredictHelper()
-app.helper.load_model('fruit_iris_core/densenet.h5py')
-print("MODEL LOADED")
+# start the server
+app = Server().start()
 
-# cleanup cached files
-# path = 'static/img/cache/'
-# filelist = os.listdir(path)
-# for f in filelist:
-#     os.remove(os.path.join(path, f))
-#     print("FILE '" + path + f + "' DESTROYED")
+# boolean, can be flipped to indicate that the trainingprocesss should start
+should_train = False
 
-# print("FILECACHE: EMPTY")
-
-# register the blueprints
-# TODO: find some dynamic way to do this
-app.register_blueprint(page_controller, url_prefix="/")
-app.register_blueprint(predict_controller, url_prefix="/predict")
-app.register_blueprint(rate_controller, url_prefix='/rate')
-
-# TODO: a dynamic error handler
-@app.errorhandler(404)
-def page_not_found(e):
-    return ErrorHandler().page_not_found(e)
-
-print("SERVER STARTED")
+# if the trainingprocess should commence, configure the trainer and start
+if should_train:
+    train = Trainer(epochs=5, 
+                    batch_size=32, 
+                    train_dir='dataset/train', val_dir='dataset/test', 
+                    width=224, height=224)
+    train.start()

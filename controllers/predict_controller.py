@@ -69,7 +69,6 @@ def predict_index():
         with app.helper.graph.as_default():
             raw_prediction = np.argmax(model.predict(image[0], batch_size=32, verbose=True))
 
-        print(raw_prediction)
         return jsonify(classes[raw_prediction], image[1])
     except FileNotFoundError:
         abort(404)
@@ -78,17 +77,15 @@ def predict_index():
     except:
         abort(503)
 
+@predict_controller.route('/classes')
+def get_classes():
+    return jsonify(classes)
+
 @predict_controller.route('/save', methods=['POST'])
 def predict_save():
-    absolute_category = request.form['category'].replace(' ', '_').lower()
+    absolute_category = request.form['category'].replace(',', '').replace(' ', '_').lower()
     name = request.form['location'].replace('static/img/cache/', '')
-    train_path = 'dataset/train/' + absolute_category + '/'
-    test_path = 'dataset/test/' + absolute_category + '/'
-
-    if (len(os.listdir(train_path)) >= 10 and len(os.listdir(train_path)) % 10 == 0):
-        path = test_path + name
-    else:
-        path = train_path + name
+    path = 'dataset/' + absolute_category + '/' + name
     
     os.rename(request.form['location'], path)
 

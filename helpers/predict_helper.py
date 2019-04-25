@@ -33,16 +33,7 @@ class PredictHelper:
         image_path = 'static/img/cache/' + str(uuid.uuid4()) + '.png'
         image.save(image_path)
 
-        # resize the saved image and save it again
-        # with open(image_path, 'r+b') as f:
-        #     with Image.open(f) as image:
-        #         if image.size > (299, 299):
-        #             cover = resizeimage.resize_cover(image, [299, 299])
-        #             cover.save(image_path, image.format)
-        #         else:
-        #             cover = resizeimage.
-        #             image.resize([299, 299])
-        #             image.save(image_path, image.format)
+        # up or downsize the image, whichever is needed
         old_im = Image.open(image_path)
         old_size = old_im.size
 

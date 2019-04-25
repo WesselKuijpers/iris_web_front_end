@@ -107,5 +107,5 @@ venv.bak/
 /.vscode
 
 /static/img/cache/*
-/dataset/*/*/*
+/dataset/*/*
 /fruit_iris_core/models/*

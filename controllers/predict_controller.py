@@ -3,6 +3,7 @@ from flask import current_app as app
 from flask import jsonify, render_template, request
 import shutil
 import os
+import numpy as np
 
 from helpers import predict_helper
 
@@ -10,13 +11,47 @@ predict_controller = Blueprint('predict_controller', __name__)
 
 # TODO: find some better way to do this
 classes = [
-    'Cox',
-    'Elstar',
-    'Golden Delicious',
-    'Granny Smith',
-    'Nashi Pear',
-    'Pink Lady'
+    'Apple, Scab',
+    'Apple, Black Rot',
+    'Apple, Cedar Rust',
+    'Apple, Healthy',
+    'Blueberry, Healthy',
+    'Cherry, Powdery Mildew',
+    'Cherry, Healthy',
+    'Maize, Cercospora Leaf Spot',
+    'Maize, Common Rust',
+    'Maize, Northern Leaf Blight',
+    'Maize, Healthy',
+    'Grape, Black Rot',
+    'Grape, Esca',
+    'Grape, Leaf Blight',
+    'Grape, Healthy',
+    'Orange, Citrus Greening',
+    'Peach, Bacterial Spot',
+    'Peach, Healthy',
+    'Bell Pepper, Bacterial Spot',
+    'Bell Pepper, Healthy',
+    'Potato, Early Blight',
+    'Potato, Late Blight',
+    'Potato, Healthy',
+    'Raspberry, Healthy',
+    'Soybean, Healthy',
+    'Squash, Powdery mildew',
+    'Strawberry, Leaf Scorch',
+    'Strawberry, Healthy',
+    'Tomato, Bacterial Spot',
+    'Tomato, Early Blight',
+    'Tomato, Late Blight',
+    'Tomato, Leaf Mold',
+    'Tomato, Septoria Leaf Spot',
+    'Tomato, Spider Mites',
+    'Tomato, Target Spot',
+    'Tomato, Yellow Leaf Curl Virus',
+    'Tomato, Mosaic Virus',
+    'Tomato, Healthy'
 ]
+
+
 
 @predict_controller.route('/', methods=['POST'])
 def predict_index():
@@ -32,9 +67,10 @@ def predict_index():
 
         # make a prediction and make a collection for every item in it
         with app.helper.graph.as_default():
-            raw_prediction = model.predict_classes(image[0], verbose=True)
+            raw_prediction = np.argmax(model.predict(image[0], batch_size=32, verbose=True))
 
-        return jsonify(classes[raw_prediction[0]], image[1])
+        print(raw_prediction)
+        return jsonify(classes[raw_prediction], image[1])
     except FileNotFoundError:
         abort(404)
     except ValueError:

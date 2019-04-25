@@ -9,6 +9,7 @@ from keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Sequential
 from keras.optimizers import SGD
+import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 

@@ -7,15 +7,10 @@ from keras import backend as k
 from keras.models import Sequential, load_model
 from PIL import Image
 from resizeimage import resizeimage
-import keras.backend as K
 
 
 class PredictHelper:
     def __init__(self):
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6, allow_growth=True)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-        K.set_session(sess)
-
         self.model = None
         self.graph = None
 
@@ -27,11 +22,11 @@ class PredictHelper:
 
         # get the model from storage and return it
         model = load_model(model_path)
-        seq = Sequential()
-        seq.add(model)
-        seq.compile(loss='categorical_crossentropy', optimizer='adam')
-        self.model = seq
-        return seq
+        # seq = Sequential()
+        # seq.add(model)
+        # seq.compile(loss='categorical_crossentropy', optimizer='adam')
+        self.model = model
+        return model
 
     def reshape_image(self, image):
         # save the image from the request
@@ -39,16 +34,35 @@ class PredictHelper:
         image.save(image_path)
 
         # resize the saved image and save it again
-        with open(image_path, 'r+b') as f:
-            with Image.open(f) as image:
-                cover = resizeimage.resize_cover(image, [224, 224])
-                cover.save(image_path, image.format)
+        # with open(image_path, 'r+b') as f:
+        #     with Image.open(f) as image:
+        #         if image.size > (299, 299):
+        #             cover = resizeimage.resize_cover(image, [299, 299])
+        #             cover.save(image_path, image.format)
+        #         else:
+        #             cover = resizeimage.
+        #             image.resize([299, 299])
+        #             image.save(image_path, image.format)
+        old_im = Image.open(image_path)
+        old_size = old_im.size
+
+        if old_size > (299, 299):
+            cover = resizeimage.resize_cover(old_im, [299, 299])
+            cover.save(image_path, old_im.format)
+        else:
+            new_size = (299, 299)
+            new_im = Image.new("RGB", new_size)
+            new_im.paste(old_im, ((new_size[0]-old_size[0])//2,
+                                (new_size[1]-old_size[1])//2))
+
+            new_im.save(image_path)
+
 
         # read the image as a numpy array
         image = io.imread(image_path, as_gray=False)
+        image = image.reshape(-1, 299, 299, 3)
         image = image.astype('float32')
         image = image / 255
-        image = image.reshape(-1, 224, 224, 3)
 
         return image, image_path
 

@@ -37,7 +37,7 @@ class Server:
         # instantiate the predicthelper class
         self.app.helper = PredictHelper()
         # load the model
-        self.app.helper.load_model('fruit_iris_core/densenet.h5py')
+        self.app.helper.load_model('fruit_iris_core/models/inception_resnet.h5py')
 
         # if the model is loaded, let the sun shine, else let the user know an error occured
         if(self.app.helper.model):

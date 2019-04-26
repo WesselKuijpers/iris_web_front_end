@@ -49,29 +49,33 @@
             </button>
         </nav>
         <div id="footer">
-        <p>
-            Stachnov Solutions & Service BV
-            <br>
-            Lamonggracht 7
-            <br>
-            1019 RD Amsterdam
-            <br>
-            The Nederlnads
-            <br>
-            T +31 20 509 10 10
-            <br>
-            E-mail: info@stachanov.com
-        </p>
+            <div class="argos-logo"><img src="{{ url_for('static', filename='img/argos.png') }}"></div>
+            <p>
+                Stachnov Solutions & Service BV
+                <br>
+                Lamonggracht 7
+                <br>
+                1019 RD Amsterdam
+                <br>
+                The Nederlnads
+                <br>
+                T +31 20 509 10 10
+                <br>
+                E-mail: info@stachanov.com
+            </p>
 
-        © Copyright 2013 Stachanov (v2.0). All rights reserved | General terms of service.
 
+
+            © Copyright 2013 Stachanov (v2.0). All rights reserved | General terms of service.
+
+
+        </div>
     </div>
-    </div>
 
-    
+
 
     {% block content %}{% endblock %}
-     
+
 </body>
 
 </html>

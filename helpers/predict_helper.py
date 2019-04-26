@@ -37,11 +37,11 @@ class PredictHelper:
         old_im = Image.open(image_path)
         old_size = old_im.size
 
-        if old_size > (299, 299):
-            cover = resizeimage.resize_cover(old_im, [299, 299])
+        if old_size > (224, 224):
+            cover = resizeimage.resize_cover(old_im, [224, 224])
             cover.save(image_path, old_im.format)
         else:
-            new_size = (299, 299)
+            new_size = (224, 224)
             new_im = Image.new("RGB", new_size)
             new_im.paste(old_im, ((new_size[0]-old_size[0])//2,
                                 (new_size[1]-old_size[1])//2))
@@ -51,7 +51,7 @@ class PredictHelper:
 
         # read the image as a numpy array
         image = io.imread(image_path, as_gray=False)
-        image = image.reshape(-1, 299, 299, 3)
+        image = image.reshape(-1, 224, 224, 3)
         image = image.astype('float32')
         image = image / 255
 

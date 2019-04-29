@@ -22,9 +22,6 @@ class PredictHelper:
 
         # get the model from storage and return it
         model = load_model(model_path)
-        # seq = Sequential()
-        # seq.add(model)
-        # seq.compile(loss='categorical_crossentropy', optimizer='adam')
         self.model = model
         return model
 

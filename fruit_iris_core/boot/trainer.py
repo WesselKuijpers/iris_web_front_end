@@ -74,10 +74,6 @@ class Trainer:
             class_mode='categorical')
 
     def train(self, model, train_generator, validation_generator):
-        # conf = K.tf.ConfigProto(device_count={'CPU': 2},
-        #                 intra_op_parallelism_threads=2,
-        #                 inter_op_parallelism_threads=2)
-        # K.set_session(K.tf.Session(config=conf))
         # try to train and save the model
         try:
             hist = model.fit_generator(

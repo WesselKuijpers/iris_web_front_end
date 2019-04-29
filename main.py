@@ -23,8 +23,8 @@ should_train = False
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:
-    train = Trainer(epochs=5, 
+    training = Trainer(epochs=5, 
                     batch_size=32, 
                     train_dir='dataset/train', val_dir='dataset/test', 
                     width=224, height=224)
-    train.start()
+    training.start()

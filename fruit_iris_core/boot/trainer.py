@@ -11,6 +11,8 @@ from keras.models import Sequential
 from keras.optimizers import SGD
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
+import json
+from flask import current_app as app
 
 
 # TODO: More SOLID
@@ -29,17 +31,27 @@ class Trainer:
         train_process.start()
 
     def initialize_trainer(self):
+        # configuring the Tensorflow option to consume only a limited amount of GPU memory
+        # pass it to keras as the current session
+        # this is done to prevent OOM errors
+        gpu_options = tf.GPUOptions(
+            per_process_gpu_memory_fraction=0.7, allow_growth=True)
+        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+        K.set_session(sess)
+        
         model = self.load_model()
         train_datagen = self.train_data_generator()
-        test_datagen = self.test_data_generator()
+        validation_datagen = self.validation_data_generator()
         train_generator = self.train_directory_flow(train_datagen)
-        validation_generator = self.train_directory_flow(test_datagen)
+        validation_generator = self.validation_directory_flow(validation_datagen)
         hist = self.train(model, train_generator, validation_generator)
-        self.plot_graph(hist)
+        self.save_graph(hist)
+        self.save_history(hist)
 
     def load_model(self):
-        model = PredictHelper().load_model('fruit_iris_core/densenet_v2.h5py')
-        return model
+        helper = PredictHelper()
+        helper.load_model('fruit_iris_core/models/model.h5py')
+        return helper.model
 
     def train_data_generator(self):
         return ImageDataGenerator(
@@ -48,9 +60,10 @@ class Trainer:
             zoom_range=0.2,
             horizontal_flip=True,
             vertical_flip=True,
-            rotation_range=20)
+            rotation_range=20,
+            validation_split=0.2)
 
-    def test_data_generator(self):
+    def validation_data_generator(self):
         return ImageDataGenerator(
             rescale=1. / 255,
             shear_range=0.2,
@@ -64,14 +77,16 @@ class Trainer:
             self.train_dir,
             target_size=(self.width, self.height),
             batch_size=self.batch_size,
-            class_mode='categorical')
+            class_mode='categorical',
+            subset='training')
 
     def validation_directory_flow(self, val_generator):
         return val_generator.flow_from_directory(
-            self.val_dir,
+            self.train_dir,
             target_size=(self.width, self.height),
             batch_size=self.batch_size,
-            class_mode='categorical')
+            class_mode='categorical',
+            subset='validation')
 
     def train(self, model, train_generator, validation_generator):
         # conf = K.tf.ConfigProto(device_count={'CPU': 2},
@@ -79,52 +94,43 @@ class Trainer:
         #                 inter_op_parallelism_threads=2)
         # K.set_session(K.tf.Session(config=conf))
         # try to train and save the model
-        try:
-            hist = model.fit_generator(
-                generator=train_generator,
-                steps_per_epoch=5516 // self.batch_size,
-                epochs=self.epochs,
-                validation_data=validation_generator,
-                validation_steps=1883 // self.batch_size)
+        hist = model.fit_generator(
+            generator=train_generator,
+            steps_per_epoch=5516 // self.batch_size,
+            epochs=self.epochs,
+            validation_data=validation_generator,
+            validation_steps=1883 // self.batch_size,
+            verbose=True)
 
-            model.save('saved_models/' +
-                       str(int(time.time())) + 'finished.h5py')
-        except KeyboardInterrupt:
-            hist = None
-            # if the process is interupted by the user save the interupted model
-            model.save('saved_models/' +
-                       str(int(time.time())) + 'interupted.h5py')
-            print("\ninterupted model was saved")
-        except:
-            hist = None
-            # re-raise the error on any other interuption
-            raise
-        finally:
-            return hist
+        model.save('fruit_iris_core/models/model.h5py')
 
-    def plot_graph(self, hist):
-        if hist:
-            accuracy = hist.history['acc']
-            val_accuracy = hist.history['val_acc']
-            loss = hist.history['loss']
-            val_loss = hist.history['val_loss']
-            epochs = range(len(accuracy))
-            plt.plot(epochs, accuracy, 'ro', label='Training accuracy')
-            plt.plot(epochs, val_accuracy, 'bo', label='Validation accuracy')
-            plt.plot(epochs, accuracy, 'r')
-            plt.plot(epochs, val_accuracy, 'b')
+        return hist
 
-            plt.title('Training and validation accuracy')
-            plt.legend()
+    def save_graph(self, hist):
+        accuracy = hist.history['acc']
+        val_accuracy = hist.history['val_acc']
+        loss = hist.history['loss']
+        val_loss = hist.history['val_loss']
+        epochs = self.epochs
 
-            plt.figure()
-            plt.plot(epochs, loss, 'ro', label='Training loss')
-            plt.plot(epochs, val_loss, 'bo', label='Validation loss')
-            plt.plot(epochs, loss, 'r')
-            plt.plot(epochs, val_loss, 'b')
-            plt.title('Training and validation loss')
-            plt.legend()
+        accuracy = plt.figure()
+        accuracy.plot(epochs, accuracy, 'ro', label='Training accuracy')
+        accuracy.plot(epochs, val_accuracy, 'bo', label='Validation accuracy')
+        accuracy.plot(epochs, accuracy, 'r')
+        accuracy.plot(epochs, val_accuracy, 'b')
+        accuracy.title('Training and validation accuracy')
+        accuracy.legend()
+        accuracy.savefig('static/model_history/accuracy.png')
 
-            plt.show()
-        else:
-            print("No graph could be generated: DATA INCOMPLETE")
+        loss = plt.figure()
+        loss.plt.plot(epochs, loss, 'ro', label='Training loss')
+        loss.plt.plot(epochs, val_loss, 'bo', label='Validation loss')
+        loss.plt.plot(epochs, loss, 'r')
+        loss.plt.plot(epochs, val_loss, 'b')
+        loss.plt.title('Training and validation loss')
+        loss.plt.legend()
+        loss.savefig('static/model_history/loss.png')
+
+    def save_history(self, hist):
+        with open('static/model_history/history.json', 'w') as f:
+            json.dump(hist.history, f)

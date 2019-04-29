@@ -6,25 +6,16 @@ import tensorflow as tf
 
 # this file covers everything that needs to happen only once
 
+# boolean, can be flipped to indicate that the trainingprocesss should start
+should_train = True
 
-# configuring the Tensorflow option to consume only a limited amount of GPU memory
-# pass it to keras as the current session
-# this is done to prevent OOM errors
-gpu_options = tf.GPUOptions(
-    per_process_gpu_memory_fraction=0.8, allow_growth=True)
-sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-K.set_session(sess)
+# if the trainingprocess should commence, configure the trainer and start
+# if should_train:
+training = Trainer(epochs=5, 
+                batch_size=32, 
+                train_dir='dataset', val_dir='dataset/test', 
+                width=224, height=224)
+training.start()
 
 # start the server
 app = Server().start()
-
-# boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = False
-
-# if the trainingprocess should commence, configure the trainer and start
-if should_train:
-    train = Trainer(epochs=5, 
-                    batch_size=32, 
-                    train_dir='dataset/train', val_dir='dataset/test', 
-                    width=224, height=224)
-    train.start()

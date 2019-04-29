@@ -65,11 +65,9 @@ function showForm(elem) {
 }
 
 function negativeHandler(elem) {
-    target = document.getElementById('categorical-select')
-    target.value = elem.value
+    category = document.getElementById('category')
+    category.value = elem.value
     sendSaveData()
-    target.classList.add("hidden")
-    target.selectedIndex = 0
 }
 
 function showMessage(elem) {
@@ -105,9 +103,37 @@ function sendSaveData() {
     $.ajax(settings)
     .success(function () {
         document.getElementById('result-positive').classList.remove('hidden')
+        target = document.getElementById('categorical-select')
+        target.classList.add("hidden")
+        target.selectedIndex = 0
     })
     .fail(function () {
         alert("Something went wrong, please try again later")
         reset()
+    })
+}
+
+function fillCategoricalSelect() {
+    let settings = {
+        crossDomain: false,
+        processData: false,
+        contentType: false,
+        type: 'GET',
+        url: "/predict/classes",
+    }
+
+    $.ajax(settings)
+    .success(function (response) {
+        let select = document.getElementById('categorical-select')
+
+        response.forEach( function(item){
+            let option = document.createElement('option')
+            option.value = item
+            option.innerHTML = item
+            select.appendChild(option)
+        })
+    })
+    .fail(function () {
+        document.getElementById('result-negative').innerHTML = "<h5>Oops... something went wrong fetching the form data, please try again later<h5>"
     })
 }

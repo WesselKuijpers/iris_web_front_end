@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Stachanov IRIS</title>
+    <title>Argos IRIS</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -25,17 +25,17 @@
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    
+
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 
-<body id='body'>
+<body id='body' onload="fillCategoricalSelect()">
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4">
-                <h5 class="text-white h4">Stachanov IRIS</h5>
+                <h5 class="text-white h4">Argos IRIS</h5>
                 <a class="text-white nav-link" href="/">Home</a>
                 <a class="text-white nav-link" href="/insight">Insights</a>
                 <a class="text-white nav-link" href="/rate">Rate</a>
@@ -50,7 +50,32 @@
         </nav>
     </div>
 
+
+
     {% block content %}{% endblock %}
 
+    <div id="footer">
+        <!-- <div class="argos-logo"><img src="{{ url_for('static', filename='img/argos.png') }}"></div> -->
+        <!-- <p>
+            Stachnov Solutions & Service BV
+            <br>
+            Lamonggracht 7
+            <br>
+            1019 RD Amsterdam
+            <br>
+            The Nederlnads
+            <br>
+            T +31 20 509 10 10
+            <br>
+            E-mail: info@stachanov.com
+        </p>
+
+
+
+        © Copyright 2013 Stachanov (v2.0). All rights reserved | General terms of service.
+ -->
+
+    </div>
 </body>
+
 </html>

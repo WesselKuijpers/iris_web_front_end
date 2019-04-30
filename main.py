@@ -3,6 +3,7 @@ from fruit_iris_core.boot.trainer import Trainer
 import multiprocessing as mp
 from keras import backend as K
 import tensorflow as tf
+from router import Router
 
 # this file covers everything that needs to happen only once
 
@@ -28,3 +29,7 @@ if should_train:
                     train_dir='dataset/train', val_dir='dataset/test', 
                     width=224, height=224)
     training.start()
+
+
+# register all the routes/blueprints in the router file
+Router().register()

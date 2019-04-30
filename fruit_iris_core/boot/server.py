@@ -4,9 +4,8 @@ import keras.backend as K
 import tensorflow as tf
 from flask import Blueprint, Flask, g
 
-from controllers.page_controller import page_controller
-from controllers.predict_controller import predict_controller
-from controllers.rate_controller import rate_controller
+import controllers
+
 from fruit_iris_core.error_handler import errors
 from helpers.predict_helper import PredictHelper
 
@@ -33,7 +32,6 @@ class Server:
         try:
             self.load_helper()
             self.clean_cache()
-            self.register_blueprints()
             self.register_error_handlers()
             print("SERVER: STARTED")
             return self.app
@@ -73,13 +71,6 @@ class Server:
             # TODO: throw actual (custom?) error
             print("ERROR: FILECACHE COULD NOT BE CLEANED")
             return False
-        
-    def register_blueprints(self):
-        # register all the required functional blueprints pointing to the controllers
-        # TODO: find some dynamic way to do this
-        self.app.register_blueprint(page_controller, url_prefix="/")
-        self.app.register_blueprint(predict_controller, url_prefix="/predict")
-        self.app.register_blueprint(rate_controller, url_prefix='/rate')
 
     def register_error_handlers(self):
         # register the error handler

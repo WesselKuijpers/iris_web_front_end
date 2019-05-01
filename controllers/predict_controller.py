@@ -41,7 +41,7 @@ classes = [
     'Strawberry, Leaf Scorch',
     'Tomato, Bacterial Spot',
     'Tomato, Early Blight',
-    'Tomato, Healthy'
+    'Tomato, Healthy',
     'Tomato, Late Blight',
     'Tomato, Leaf Mold',
     'Tomato, Mosaic Virus',

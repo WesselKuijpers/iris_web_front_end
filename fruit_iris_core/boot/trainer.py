@@ -50,7 +50,7 @@ class Trainer:
 
     def load_model(self):
         helper = PredictHelper()
-        helper.load_model('fruit_iris_core/models/model.h5py')
+        helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
         return helper.model
 
     def train_data_generator(self):
@@ -98,7 +98,7 @@ class Trainer:
             validation_steps=1883 // self.batch_size,
             verbose=True)
 
-        model.save('fruit_iris_core/models/model.h5py')
+        model.save('fruit_iris_core/models/mobilenet.1.h5py')
 
         return hist
 

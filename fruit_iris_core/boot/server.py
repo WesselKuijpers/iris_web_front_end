@@ -44,7 +44,7 @@ class Server:
         self.app.helper = PredictHelper()
         # load the model
 
-        self.app.helper.load_model('fruit_iris_core/models/model.h5py')
+        self.app.helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
 
         # if the model is loaded, let the sun shine, else let the user know an error occured
         if(self.app.helper.model):

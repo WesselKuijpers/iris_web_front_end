@@ -26,27 +26,30 @@ class Trainer:
         self.height = height
         self.model = None
 
-    def start(self):
-        train_process = mp.Process(target=self.initialize_trainer)
+    def start(self, event):
+        # e.unset()
+        train_process = mp.Process(target=self.initialize_trainer, args=(event,))
         train_process.start()
 
-    def initialize_trainer(self):
-        # configuring the Tensorflow option to consume only a limited amount of GPU memory
-        # pass it to keras as the current session
-        # this is done to prevent OOM errors
-        gpu_options = tf.GPUOptions(
-            per_process_gpu_memory_fraction=0.7, allow_growth=True)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-        K.set_session(sess)
-        
-        model = self.load_model()
-        train_datagen = self.train_data_generator()
-        validation_datagen = self.validation_data_generator()
-        train_generator = self.train_directory_flow(train_datagen)
-        validation_generator = self.validation_directory_flow(validation_datagen)
-        hist = self.train(model, train_generator, validation_generator)
-        self.save_graph(hist)
-        self.save_history(hist)
+    def initialize_trainer(self, event):
+        while True:
+            # configuring the Tensorflow option to consume only a limited amount of GPU memory
+            # pass it to keras as the current session
+            # this is done to prevent OOM errors
+            gpu_options = tf.GPUOptions(
+                per_process_gpu_memory_fraction=0.7, allow_growth=True)
+            sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+            K.set_session(sess)
+            
+            model = self.load_model()
+            train_datagen = self.train_data_generator()
+            # validation_datagen = self.validation_data_generator()
+            train_generator = self.train_directory_flow(train_datagen)
+            validation_generator = self.validation_directory_flow(train_datagen)
+            hist = self.train(model, train_generator, validation_generator)
+            self.save_graph(hist)
+            self.save_history(hist)
+            event.set()
 
     def load_model(self):
         helper = PredictHelper()
@@ -107,25 +110,25 @@ class Trainer:
         val_accuracy = hist.history['val_acc']
         loss = hist.history['loss']
         val_loss = hist.history['val_loss']
-        epochs = self.epochs
+        epochs = range(self.epochs)
 
-        accuracy = plt.figure()
-        accuracy.plot(epochs, accuracy, 'ro', label='Training accuracy')
-        accuracy.plot(epochs, val_accuracy, 'bo', label='Validation accuracy')
-        accuracy.plot(epochs, accuracy, 'r')
-        accuracy.plot(epochs, val_accuracy, 'b')
-        accuracy.title('Training and validation accuracy')
-        accuracy.legend()
-        accuracy.savefig('static/model_history/accuracy.png')
+        plt.figure()
+        plt.plot(epochs, accuracy, 'ro', label='Training accuracy')
+        plt.plot(epochs, val_accuracy, 'bo', label='Validation accuracy')
+        plt.plot(epochs, accuracy, 'r')
+        plt.plot(epochs, val_accuracy, 'b')
+        plt.title('Training and validation accuracy')
+        plt.legend()
+        plt.savefig('static/model_history/accuracy.png')
 
-        loss = plt.figure()
-        loss.plt.plot(epochs, loss, 'ro', label='Training loss')
-        loss.plt.plot(epochs, val_loss, 'bo', label='Validation loss')
-        loss.plt.plot(epochs, loss, 'r')
-        loss.plt.plot(epochs, val_loss, 'b')
-        loss.plt.title('Training and validation loss')
-        loss.plt.legend()
-        loss.savefig('static/model_history/loss.png')
+        plt.figure()
+        plt.plot(epochs, loss, 'ro', label='Training loss')
+        plt.plot(epochs, val_loss, 'bo', label='Validation loss')
+        plt.plot(epochs, loss, 'r')
+        plt.plot(epochs, val_loss, 'b')
+        plt.title('Training and validation loss')
+        plt.legend()
+        plt.savefig('static/model_history/loss.png')
 
     def save_history(self, hist):
         with open('static/model_history/history.json', 'w') as f:

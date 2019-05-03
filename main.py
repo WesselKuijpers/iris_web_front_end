@@ -15,9 +15,9 @@ should_train = False
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:
-    training = Trainer(epochs=100, 
+    training = Trainer(epochs=3, 
                     batch_size=32, 
-                    train_dir='dataset', val_dir='dataset/test', 
+                    train_dir='dataset/train', val_dir='dataset/train', test_dir='dataset/test', 
                     width=224, height=224)
     event = mp.Event()
     training.start(event)

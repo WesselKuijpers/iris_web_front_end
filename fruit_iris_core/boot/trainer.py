@@ -13,15 +13,17 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import json
 from flask import current_app as app
+from sklearn.metrics import classification_report
 
 
 # TODO: More SOLID
 class Trainer:
-    def __init__(self, epochs, batch_size, train_dir, val_dir, width, height):
+    def __init__(self, epochs, batch_size, train_dir, val_dir, test_dir, width, height):
         self.epochs = epochs
         self.batch_size = batch_size
         self.train_dir = train_dir
         self.val_dir = val_dir
+        self.test_dir = test_dir
         self.width = width
         self.height = height
         self.model = None
@@ -49,6 +51,7 @@ class Trainer:
             hist = self.train(model, train_generator, validation_generator)
             self.save_graph(hist)
             self.save_history(hist)
+            self.save_classification_report()
             event.set()
 
     def load_model(self):
@@ -90,6 +93,23 @@ class Trainer:
             batch_size=self.batch_size,
             class_mode='categorical',
             subset='validation')
+
+    def test_data_generator(self):
+        return ImageDataGenerator(
+            rescale=1. / 255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+            vertical_flip=True,
+            rotation_range=20)
+
+    def test_directory_flow(self, test_generator):
+        return test_generator.flow_from_directory(
+            self.test_dir,
+            target_size=(self.width, self.height),
+            batch_size=self.batch_size,
+            class_mode='categorical',
+            shuffle=False)
 
     def train(self, model, train_generator, validation_generator):
         # try to train and save the model
@@ -133,3 +153,18 @@ class Trainer:
     def save_history(self, hist):
         with open('static/model_history/history.json', 'w') as f:
             json.dump(hist.history, f)
+
+    def save_classification_report(self):
+        model = self.load_model()
+        with open('fruit_iris_core/classes.json', 'r') as file:
+            classes = json.load(file)
+
+        test_datagen = self.test_data_generator()
+        test_dir_flow = self.test_directory_flow(test_datagen)
+        y_pred = model.predict_generator(test_dir_flow, 324)
+        y_pred = np.argmax(y_pred, axis=1)
+        cr = classification_report(test_dir_flow.classes, y_pred, target_names=classes, output_dict=True)
+
+        with open('static/model_history/classification_report.json', 'w') as file:
+            json.dump(cr, file)
+            

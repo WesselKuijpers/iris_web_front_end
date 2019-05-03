@@ -2,16 +2,47 @@
 
 {% block content %}
 <div class="container">
+    <div class="row">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Argos IRIS Insights</h1>
+                <p class="lead">
+                    This page contains all the information about the inner workings of Argos IRIS, as well as metrics
+                    calculated on the model.
+                    <br>
+                    The data on this page is constantly updated with the latest metrics, because the model is constantly
+                    adapting to new data.
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr>
     <div class="row mb-4">
+        <div class="col-12">
+            <h3>Accuracy and Loss</h3>
+            <p>
+                Below you will find the metrics for the accuracy and loss of the current model during the training
+                process.
+                <br>
+                The lines labled 'training accuracy' and 'training loss' contain the metrict during the actual process
+                with data that the model has 'seen' before.
+                <br>
+                The lines labled 'validation accuracy' and 'validation loss' show how the model preformed in predicting
+                data that was never seen before.
+                <br>
+                Ideally, the validation line should closely follow the training line.
+            </p>
+        </div>
         <div class="col-lg-6 col-sm-12">
             <div class="card mt-4">
                 <div class="card-body">
                     <h5 class="card-title">Accuracy</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Higher is better</h6>
-                    <div class="text-center">
-                        <img src="{{ url_for('static', filename='model_history/accuracy.png') }}" class="img-fluid">
-                    </div>
                     <br>
+                    <div class="text-center">
+                        <canvas id="accuracy-chart"></canvas>
+                    </div>
+                    <hr>
                     <p class="card-text">
                         The accuracy of a model is usually determined after the model parameters are learned and fixed
                         and no learning is taking place. Then the test samples are fed to the model and the number of
@@ -29,10 +60,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Loss</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Lower is better</h6>
-                    <div class="text-center">
-                        <img src="{{ url_for('static', filename='model_history/loss.png') }}" class="img-fluid">
-                    </div>
                     <br>
+                    <div class="text-center">
+                        <canvas id="loss-chart"></canvas>
+                    </div>
+                    <hr>
                     <p class="card-text">
                         Loss value implies how well or poorly a certain model behaves after each iteration of
                         optimization. Ideally, one would expect the reduction of loss after each, or several,
@@ -40,11 +72,30 @@
                         <br>
                         Loss is often used in the training process to find the "best" parameter values for your model
                         (e.g. weights in neural network). It is what you try to optimize in the training by updating
-                        weights
+                        weights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Per class precision</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">in percentages</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="precision-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text">
+                        This chart shows how often a made prediction for a specific class are correct.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/insight.js') }}"></script>
 {% endblock %}

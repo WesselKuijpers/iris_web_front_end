@@ -139,7 +139,14 @@ function fillCategoricalSelect() {
 }
 
 function load() {
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    
+    if(ca == null) {
+        document.cookie = "lng=en"
+    }
+
     fillCategoricalSelect()
-    translatePage('en')
+    translatePage()
     fillLanguageSelect()
 }

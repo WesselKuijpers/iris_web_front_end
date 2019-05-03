@@ -115,3 +115,8 @@ body {
     background-attachment: fixed !important;
     background-size: 30px auto;
 }
+
+.card {
+    border-radius: 0 !important;
+    /* height: 100% !important; */
+}

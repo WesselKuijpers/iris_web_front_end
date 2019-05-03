@@ -78,16 +78,14 @@
 <script>
     $("#upload-button").on("click", function () {
         $("#upload-input").trigger("click");
+        fillCategoricalSelect()
     });
 
     $("#upload-input").on("change", async function () {
-        filename = $("#upload-input").val()
+        filename = $("#upload-input").val().toLowerCase()
         if (filename.includes(".jpg") || 
             filename.includes(".png") || 
-            filename.includes(".jpeg") || 
-            filename.includes(".JPG") || 
-            filename.includes(".PNG") || 
-            filename.includes(".JPEG")) {
+            filename.includes(".jpeg")) {
             result = await sendPredictData()
             fillForm(result)
         } else {

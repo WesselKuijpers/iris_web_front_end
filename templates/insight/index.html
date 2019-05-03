@@ -1,5 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-lg-6 col-sm-12">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Accuracy</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Higher is better</h6>
+                    <div class="text-center">
+                        <img src="{{ url_for('static', filename='model_history/accuracy.png') }}" class="img-fluid">
+                    </div>
+                    <br>
+                    <p class="card-text">
+                        The accuracy of a model is usually determined after the model parameters are learned and fixed
+                        and no learning is taking place. Then the test samples are fed to the model and the number of
+                        mistakes (zero-one loss) the model makes are recorded, after comparison to the true targets.
+                        Then the percentage of misclassification is calculated.
+                        <br>
+                        For example, if the number of test samples is 1000 and model classifies 952 of those correctly,
+                        then the model's accuracy is 95.2%.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Loss</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Lower is better</h6>
+                    <div class="text-center">
+                        <img src="{{ url_for('static', filename='model_history/loss.png') }}" class="img-fluid">
+                    </div>
+                    <br>
+                    <p class="card-text">
+                        Loss value implies how well or poorly a certain model behaves after each iteration of
+                        optimization. Ideally, one would expect the reduction of loss after each, or several,
+                        iteration(s).
+                        <br>
+                        Loss is often used in the training process to find the "best" parameter values for your model
+                        (e.g. weights in neural network). It is what you try to optimize in the training by updating
+                        weights
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

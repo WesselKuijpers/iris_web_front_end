@@ -146,7 +146,7 @@ function load() {
         document.cookie = "lng=en"
     }
 
-    fillCategoricalSelect()
+    // fillCategoricalSelect()
     translatePage()
     fillLanguageSelect()
 }

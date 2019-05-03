@@ -2,9 +2,9 @@ from flask import Flask, Blueprint, jsonify
 from flask import render_template
 import json
 
-translation_controller = Blueprint('translation_controller', __name__)
+translate_controller = Blueprint('translate_controller', __name__)
 
-@translation_controller.route('/')
+@translate_controller.route('/')
 def get_translations():
     with open('static/translations/translation.json', 'r') as file:
         op = json.load(file)

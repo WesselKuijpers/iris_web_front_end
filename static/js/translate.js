@@ -1,5 +1,5 @@
 async function getTranslation() {
-    let response = await fetch('/translations/')
+    let response = await fetch('/translate/')
     let data = await response.json()
     return data
 }

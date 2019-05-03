@@ -1,0 +1,34 @@
+{
+    "en" : {
+        "translations" : {
+            "page.index.upload.caption" : "Tap to upload photo",
+            "page.index.result.try-again.button" : "Try Again!",
+            "page.index.result.survey.title" : "Help us out?",
+            "page.index.result.survey.dropdown.default" : "Did it work?",
+            "page.index.result.survey.dropdown.positive" : "yes",
+            "page.index.result.survey.dropdown.negative" : "no",
+            "page.index.result.survey.answered.thank-you" : "Thank you!",
+            "page.index.result.survey.answered.dropdown.default" : "Then what is it?",
+            "base.navbar.link.home" : "home",
+            "base.navbar.link.insight" : "insights",
+            "base.navbar.link.rate" : "rate"
+        },
+        "fullname" : "English"
+    },
+    "nl" : {
+        "translations" : {
+            "page.index.upload.caption" : "Tik om foto te uploaden",
+            "page.index.result.try-again.button" : "Opnieuw!",
+            "page.index.result.survey.title" : "Handje helpen?",
+            "page.index.result.survey.dropdown.default" : "Klopt de voorspelling?",
+            "page.index.result.survey.dropdown.positive" : "ja",
+            "page.index.result.survey.dropdown.negative" : "nee",
+            "page.index.result.survey.answered.thank-you" : "Bedankt!",
+            "page.index.result.survey.answered.dropdown.default" : "Wat is het dan?",
+            "base.navbar.link.home" : "home",
+            "base.navbar.link.insight" : "statistieken",
+            "base.navbar.link.rate" : "beoordelen"
+        },
+        "fullname" : "Nederlands"
+    }
+}

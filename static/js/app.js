@@ -137,3 +137,9 @@ function fillCategoricalSelect() {
         document.getElementById('result-negative').innerHTML = "<h5>Oops... something went wrong fetching the form data, please try again later<h5>"
     })
 }
+
+function load() {
+    fillCategoricalSelect()
+    translatePage('en')
+    fillLanguageSelect()
+}

@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
-            <h3>Tap to upload photo</h3>
+            <h3 id="page.index.upload.caption">Tap to upload photo</h3>
         </div>
         <input type="file" style="display: none" id="upload-input">
     </div>
@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-12 text-center"><br>
                 <h3>
-                    <button class="btn btn-danger stretched-link" onclick="reset()">Try again!</button>
+                    <button class="btn btn-danger stretched-link" onclick="reset()" id='page.index.result.try-again.button'>Try again!</button>
                 </h3>
             </div>
         </div>
@@ -45,28 +45,28 @@
         <hr>
         <div class="row">
             <div class="col-12 text-center">
-                <h5>Help us out?</h5>
+                <h5 id='page.index.result.survey.title'>Help us out?</h5>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-12">
                 <div class="input-group mb-3" id='result-form'>
                     <select class="custom-select" id="binary-select" onchange="showForm(this)">
-                        <option selected>Did it work?</option>
-                        <option value=1>Yes</option>
-                        <option value=2>No</option>
+                        <option selected id='page.index.result.survey.dropdown.default'>Did it work?</option>
+                        <option value=1 id='page.index.result.survey.dropdown.positive'>Yes</option>
+                        <option value=2 id='page.index.result.survey.dropdown.negative'>No</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
     <div id='result-positive' class="hidden col-12">
-        <h3 style="text-align: center;">Thank you!</h3>
+        <h3 style="text-align: center;" id='page.index.result.survey.answered.thank-you'>Thank you!</h3>
     </div>
     <div id='result-negative' class="hidden col-12">
         <div class="input-group mb-3">
             <select class="custom-select" id="categorical-select" onchange="negativeHandler(this)">
-                <option selected>Then what is it?</option>
+                <option selected id='page.index.result.survey.answered.dropdown.default'>Then what is it?</option>
             </select>
         </div>
     </div>

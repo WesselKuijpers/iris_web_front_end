@@ -11,7 +11,7 @@ import threading
 
 
 # boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = True
+should_train = False
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:
@@ -30,13 +30,14 @@ app = Server().start()
 Router().register()
 
 
-def listen_for_model_change(event):
-    while not event.is_set():
-        pass
-    else:
-        app.helper.clear_session()
-        app.helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
-        print("MODEL: RELOADED")
+if should_train:
+    def listen_for_model_change(event):
+        while not event.is_set():
+            pass
+        else:
+            app.helper.clear_session()
+            app.helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
+            print("MODEL: RELOADED")
 
-x = threading.Thread(target=listen_for_model_change, args=(event,))
-x.start()
+    x = threading.Thread(target=listen_for_model_change, args=(event,))
+    x.start()

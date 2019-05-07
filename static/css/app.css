@@ -127,3 +127,7 @@ body {
     padding-top: 2rem !important;
     margin-bottom: 0 !important;
 }
+
+th {
+    border: 0 !important;
+}

@@ -19,3 +19,9 @@ def insight_data_report():
     with open('static/model_history/classification_report.json', 'r') as file:
         op = json.load(file)
     return jsonify(op)
+
+@insight_controller.route('/data/confusion_matrix')
+def insight_confusion_matrix():
+    with open('static/model_history/confusion_matrix.json', 'r') as file:
+        op = json.load(file)
+    return jsonify(op)

@@ -13,7 +13,7 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import json
 from flask import current_app as app
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 # TODO: More SOLID
@@ -27,9 +27,10 @@ class Trainer:
         self.width = width
         self.height = height
         self.model = None
+        self.y_pred = None
+        self.test_flow = None
 
     def start(self, event):
-        # e.unset()
         train_process = mp.Process(target=self.initialize_trainer, args=(event,))
         train_process.start()
 
@@ -51,7 +52,9 @@ class Trainer:
             hist = self.train(model, train_generator, validation_generator)
             self.save_graph(hist)
             self.save_history(hist)
+            self.predict_test_batch()
             self.save_classification_report()
+            self.save_confusion_matrix()
             event.set()
 
     def load_model(self):
@@ -150,21 +153,35 @@ class Trainer:
         plt.legend()
         plt.savefig('static/model_history/loss.png')
 
+    def predict_test_batch(self):
+        model = self.load_model()
+        test_datagen = self.test_data_generator()
+        test_dir_flow = self.test_directory_flow(test_datagen)
+        y_pred = model.predict_generator(test_dir_flow, 324)
+        y_pred = np.argmax(y_pred, axis=1)
+
+        self.y_pred = y_pred
+        self.test_flow = test_dir_flow
+
+
     def save_history(self, hist):
         with open('static/model_history/history.json', 'w') as f:
             json.dump(hist.history, f)
 
     def save_classification_report(self):
-        model = self.load_model()
         with open('fruit_iris_core/classes.json', 'r') as file:
             classes = json.load(file)
 
-        test_datagen = self.test_data_generator()
-        test_dir_flow = self.test_directory_flow(test_datagen)
-        y_pred = model.predict_generator(test_dir_flow, 324)
-        y_pred = np.argmax(y_pred, axis=1)
-        cr = classification_report(test_dir_flow.classes, y_pred, target_names=classes, output_dict=True)
+        cr = classification_report(self.test_flow.classes, self.y_pred, target_names=classes, output_dict=True)
 
         with open('static/model_history/classification_report.json', 'w') as file:
             json.dump(cr, file)
+
+    def save_confusion_matrix(self):
+        cm = confusion_matrix(self.test_flow.classes, self.y_pred)
+
+        print(cm)
+
+        with open('static/model_history/confusion_matrix.json', 'w') as file:
+            json.dump(cm.tolist(), file)
             

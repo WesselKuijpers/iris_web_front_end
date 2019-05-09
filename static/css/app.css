@@ -131,3 +131,8 @@ body {
 th {
     border: 0 !important;
 }
+
+.progress-bar {
+    background-color: #dd4b39;
+    color: black;
+}

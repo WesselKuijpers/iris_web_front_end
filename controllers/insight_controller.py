@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, jsonify
-from flask import render_template
+from flask import render_template, request
 import json
+import ast
 
 insight_controller = Blueprint('insight_controller', __name__)
 
@@ -21,7 +22,23 @@ def insight_data_report():
     return jsonify(op)
 
 @insight_controller.route('/data/confusion_matrix')
-def insight_confusion_matrix():
+def insight_data_confusion_matrix():
     with open('static/model_history/confusion_matrix.json', 'r') as file:
         op = json.load(file)
     return jsonify(op)
+
+@insight_controller.route('/stream/catch', methods=['POST'])
+def insight_stream_catch():
+    current_situation = ast.literal_eval(request.form['data'])
+    current_situation['epochs'] = int(request.headers['epochs'])
+    current_situation['epoch'] = current_situation['epoch'] + 1
+    with open('static/model_history/current_situation.json', 'w') as file:
+        json.dump(current_situation, file)
+
+    return jsonify({"status": 200})
+
+@insight_controller.route('/data/current_situation')
+def insight_data_current_situation():
+    with open('static/model_history/current_situation.json', 'r') as file:
+        cs = json.load(file)
+    return jsonify(cs)

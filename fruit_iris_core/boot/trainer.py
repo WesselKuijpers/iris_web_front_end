@@ -14,6 +14,8 @@ from keras.preprocessing.image import ImageDataGenerator
 import json
 from flask import current_app as app
 from sklearn.metrics import classification_report, confusion_matrix
+from keras.callbacks import ModelCheckpoint, RemoteMonitor
+
 
 
 # TODO: More SOLID
@@ -59,7 +61,7 @@ class Trainer:
 
     def load_model(self):
         helper = PredictHelper()
-        helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
+        helper.load_model('fruit_iris_core/models/mobilenet.3.h5py')
         return helper.model
 
     def train_data_generator(self):
@@ -115,6 +117,9 @@ class Trainer:
             shuffle=False)
 
     def train(self, model, train_generator, validation_generator):
+
+        checkpoint = ModelCheckpoint('fruit_iris_core/models/mobilenet.3.h5py', monitor='val_acc', verbose=1, save_best_only=False, mode='max', save_weights_only=False)
+        remote = RemoteMonitor(root='http://localhost:5000', path='/insight/stream/catch', headers={'epochs': str(self.epochs)}, field='data', send_as_json=False)
         # try to train and save the model
         hist = model.fit_generator(
             generator=train_generator,
@@ -122,9 +127,8 @@ class Trainer:
             epochs=self.epochs,
             validation_data=validation_generator,
             validation_steps=1883 // self.batch_size,
-            verbose=True)
-
-        model.save('fruit_iris_core/models/mobilenet.1.h5py')
+            verbose=True,
+            callbacks=[checkpoint, remote])
 
         return hist
 
@@ -179,8 +183,6 @@ class Trainer:
 
     def save_confusion_matrix(self):
         cm = confusion_matrix(self.test_flow.classes, self.y_pred)
-
-        print(cm)
 
         with open('static/model_history/confusion_matrix.json', 'w') as file:
             json.dump(cm.tolist(), file)

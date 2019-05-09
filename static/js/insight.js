@@ -22,6 +22,12 @@ async function getConfusionMatrix() {
     return data
 }
 
+async function getCurrentSituation() {
+    let response = await fetch('/insight/data/current_situation')
+    let data = await response.json()
+    return data
+}
+
 function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false, startAtZero = false) {
     let chart = document.getElementById(id).getContext('2d');
 
@@ -70,6 +76,12 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
                 yAxes: [{
                     ticks: {
                         beginAtZero: startAtZero
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'epochs'
                     }
                 }]
             }
@@ -216,6 +228,20 @@ function createTableRows(label, row) {
     return table_row
 }
 
+function loadProgress() {
+    getCurrentSituation().then(function(data) {
+        progbar = document.getElementById("epoch-progress")
+        percentage = data['epoch'] / data['epochs'] * 100
+        progbar.style.width = percentage + "%"
+        progbar.innerHTML = "epoch " + data['epoch'] + " of " + data['epochs']
+
+        document.getElementById('current-accuracy').innerHTML = Math.round(data['acc'] * 100 * 10) / 10 + "%" 
+        document.getElementById('current-validation-accuracy').innerHTML = Math.round(data['val_acc'] * 100 * 10) / 10 + "%"
+        document.getElementById('current-loss').innerHTML = Math.round(data['loss'] * 10000) / 10000
+        document.getElementById('current-validation-loss').innerHTML = Math.round(data['val_loss'] * 10000) / 10000
+    })
+}
+
 getHistory().then(function(data) {
     plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
     plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
@@ -241,4 +267,16 @@ getClasses().then(function(classes) {
         document.getElementById('confusion-matrix').appendChild(table_body)
     })
 })
+
+loadProgress()
+
+function togglePopOver(elem) {
+    id = $(elem).data('bs.popover').tip.id
+    popover = $("#" + id)
+    if (popover.hasClass('hidden')) {
+        popover.removeClass('hidden')
+    } else {
+        popover.addClass('hidden')
+    }
+}
 

@@ -11,11 +11,11 @@ import threading
 
 
 # boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = False
+should_train = True
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:
-    training = Trainer(epochs=5, 
+    training = Trainer(epochs=100, 
                     batch_size=32, 
                     train_dir='dataset/train', val_dir='dataset/train', test_dir='dataset/test', 
                     width=224, height=224)
@@ -36,7 +36,7 @@ if should_train:
             pass
         else:
             app.helper.clear_session()
-            app.helper.load_model('fruit_iris_core/models/mobilenet.1.h5py')
+            app.helper.load_model('fruit_iris_core/models/mobilenet.3.h5py')
             print("MODEL: RELOADED")
 
     x = threading.Thread(target=listen_for_model_change, args=(event,))

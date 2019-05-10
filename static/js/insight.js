@@ -231,14 +231,41 @@ function createTableRows(label, row) {
 function loadProgress() {
     getCurrentSituation().then(function(data) {
         progbar = document.getElementById("epoch-progress")
-        percentage = data['epoch'] / data['epochs'] * 100
+        percentage = data['current_situation']['epoch'] / data['current_situation']['epochs'] * 100
         progbar.style.width = percentage + "%"
-        progbar.innerHTML = "epoch " + data['epoch'] + " of " + data['epochs']
+        progbar.innerHTML = "epoch " + data['current_situation']['epoch'] + " of " + data['current_situation']['epochs']
 
-        document.getElementById('current-accuracy').innerHTML = Math.round(data['acc'] * 100 * 10) / 10 + "%" 
-        document.getElementById('current-validation-accuracy').innerHTML = Math.round(data['val_acc'] * 100 * 10) / 10 + "%"
-        document.getElementById('current-loss').innerHTML = Math.round(data['loss'] * 10000) / 10000
-        document.getElementById('current-validation-loss').innerHTML = Math.round(data['val_loss'] * 10000) / 10000
+        current_accuracy = document.getElementById('current-accuracy')
+        current_accuracy.innerHTML = Math.round(data['current_situation']['acc'] * 100 * 10) / 10 + "%"
+        if(data['current_situation']['acc'] < data['previous_situation']['acc']) {
+            current_accuracy.style.color = "red"
+        } else {
+            current_accuracy.style.color = "#007F0E"
+        }
+
+        current_validation_accuracy = document.getElementById('current-validation-accuracy')
+        current_validation_accuracy.innerHTML = Math.round(data['current_situation']['val_acc'] * 100 * 10) / 10 + "%"
+        if(data['current_situation']['val_acc'] < data['previous_situation']['val_acc']) {
+            current_validation_accuracy.style.color = "red"
+        } else {
+            current_validation_accuracy.style.color = "#007F0E"
+        }
+
+        current_loss = document.getElementById('current-loss')
+        current_loss.innerHTML = Math.round(data['current_situation']['loss'] * 10000) / 10000
+        if(data['current_situation']['loss'] > data['previous_situation']['loss']) {
+            current_loss.style.color = "red"
+        } else {
+            current_loss.style.color = "#007F0E"
+        }
+
+        current_validation_loss = document.getElementById('current-validation-loss')
+        current_validation_loss.innerHTML = Math.round(data['current_situation']['val_loss'] * 10000) / 10000
+        if(data['current_situation']['val_loss'] > data['previous_situation']['val_loss']) {
+            current_validation_loss.style.color = "red"
+        } else {
+            current_validation_loss.style.color = "#007F0E"
+        }
     })
 }
 

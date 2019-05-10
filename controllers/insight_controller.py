@@ -32,13 +32,22 @@ def insight_stream_catch():
     current_situation = ast.literal_eval(request.form['data'])
     current_situation['epochs'] = int(request.headers['epochs'])
     current_situation['epoch'] = current_situation['epoch'] + 1
-    with open('static/model_history/current_situation.json', 'w') as file:
-        json.dump(current_situation, file)
+
+    situation = None
+
+    with open('static/model_history/situation.json', 'r') as file:
+        situation = json.load(file)
+
+    situation['previous_situation'] = situation['current_situation']
+    situation['current_situation'] = current_situation
+
+    with open('static/model_history/situation.json', 'w') as file:
+        json.dump(situation, file)
 
     return jsonify({"status": 200})
 
 @insight_controller.route('/data/current_situation')
 def insight_data_current_situation():
-    with open('static/model_history/current_situation.json', 'r') as file:
+    with open('static/model_history/situation.json', 'r') as file:
         cs = json.load(file)
     return jsonify(cs)

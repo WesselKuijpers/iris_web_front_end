@@ -27,25 +27,6 @@ def insight_data_confusion_matrix():
         op = json.load(file)
     return jsonify(op)
 
-@insight_controller.route('/stream/catch', methods=['POST'])
-def insight_stream_catch():
-    current_situation = ast.literal_eval(request.form['data'])
-    current_situation['epochs'] = int(request.headers['epochs'])
-    current_situation['epoch'] = current_situation['epoch'] + 1
-
-    situation = None
-
-    with open('static/model_history/situation.json', 'r') as file:
-        situation = json.load(file)
-
-    situation['previous_situation'] = situation['current_situation']
-    situation['current_situation'] = current_situation
-
-    with open('static/model_history/situation.json', 'w') as file:
-        json.dump(situation, file)
-
-    return jsonify({"status": 200})
-
 @insight_controller.route('/data/current_situation')
 def insight_data_current_situation():
     with open('static/model_history/situation.json', 'r') as file:

@@ -1,1 +1,0 @@
-{"current_situation": {"epoch": 69, "val_loss": 0.011139548738862788, "val_acc": 0.9983836206896551, "loss": 0.0001039727134691726, "acc": 1.0, "epochs": 100}, "previous_situation": {"epoch": 68, "val_loss": 0.03250272063855346, "val_acc": 0.9946120689655172, "loss": 0.0001139375573204966, "acc": 1.0, "epochs": 100}}

@@ -15,7 +15,6 @@ import json
 from flask import current_app as app
 from sklearn.metrics import classification_report, confusion_matrix
 from keras.callbacks import ModelCheckpoint, RemoteMonitor
-from fruit_iris_core.callbacks.SaveSituation import SaveSituation
 from fruit_iris_core.callbacks.SaveSituations import SaveSituations
 
 

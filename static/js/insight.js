@@ -92,7 +92,7 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
 function plotReportChart(json_data, data_key, id, percentage = false) {
     let chart = document.getElementById(id).getContext('2d');
 
-    keys= []
+    keys = []
     data = []
     for (let key in json_data) {
         if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
@@ -140,7 +140,7 @@ function fillTableHead(data) {
     empty_th.innerHTML = "Classes"
     head_row.appendChild(empty_th)
 
-    data.forEach(function(label) {
+    data.forEach(function (label) {
         let th = document.createElement("th")
         th.innerHTML = label
         head_row.appendChild(th)
@@ -154,7 +154,7 @@ function createTableRows(label, row) {
     let table_label = document.createElement("th")
     table_label.innerHTML = label
     table_row.appendChild(table_label)
-    row.forEach(function(item) {
+    row.forEach(function (item) {
         let td = document.createElement("td")
         td.innerHTML = item
         table_row.appendChild(td)
@@ -163,69 +163,84 @@ function createTableRows(label, row) {
 }
 
 function loadProgress() {
-    getCurrentSituation().then(function(data) {
+    getCurrentSituation().then(function (data) {
         progbar = document.getElementById("epoch-progress")
-        percentage = data['current_situation']['epoch'] / data['current_situation']['epochs'] * 100
+        percentage = data[0]['epoch'] / data[0]['epochs'] * 100
         progbar.style.width = percentage + "%"
-        progbar.innerHTML = "epoch " + data['current_situation']['epoch'] + " of " + data['current_situation']['epochs']
+        progbar.innerHTML = "epoch " + data[0]['epoch'] + " of " + data[0]['epochs']
 
         current_accuracy = document.getElementById('current-accuracy')
-        current_accuracy.innerHTML = Math.round(data['current_situation']['acc'] * 100 * 10) / 10 + "%"
-        if(data['current_situation']['acc'] < data['previous_situation']['acc']) {
-            current_accuracy.style.color = "red"
-            current_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_accuracy.style.color = "#007F0E"
-            current_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+        current_accuracy.innerHTML = Math.round(data[0]['acc'] * 100 * 10) / 10 + "%"
+        checkAndColour(current_accuracy, 'acc', data)
 
         current_validation_accuracy = document.getElementById('current-validation-accuracy')
-        current_validation_accuracy.innerHTML = Math.round(data['current_situation']['val_acc'] * 100 * 10) / 10 + "%"
-        if(data['current_situation']['val_acc'] < data['previous_situation']['val_acc']) {
-            current_validation_accuracy.style.color = "red"
-            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_validation_accuracy.style.color = "#007F0E"
-            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+        current_validation_accuracy.innerHTML = Math.round(data[0]['val_acc'] * 100 * 10) / 10 + "%"
+        checkAndColour(current_validation_accuracy, 'val_acc', data)
 
         current_loss = document.getElementById('current-loss')
-        current_loss.innerHTML = Math.round(data['current_situation']['loss'] * 10000) / 10000
-        if(data['current_situation']['loss'] > data['previous_situation']['loss']) {
-            current_loss.style.color = "red"
-            current_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_loss.style.color = "#007F0E"
-            current_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+        current_loss.innerHTML = Math.round(data[0]['loss'] * 10000) / 10000
+        checkAndColour(current_loss, 'loss', data, true)
 
         current_validation_loss = document.getElementById('current-validation-loss')
-        current_validation_loss.innerHTML = Math.round(data['current_situation']['val_loss'] * 10000) / 10000
-        if(data['current_situation']['val_loss'] > data['previous_situation']['val_loss']) {
-            current_validation_loss.style.color = "red"
-            current_validation_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_validation_loss.style.color = "#007F0E"
-            current_validation_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+        current_validation_loss.innerHTML = Math.round(data[0]['val_loss'] * 10000) / 10000
+        checkAndColour(current_validation_loss, 'val_loss', data, true)
+
+        fillCurrentSituationGraphs(data)
     })
 }
 
-getHistory().then(function(data) {
+function fillCurrentSituationGraphs(data) {
+    let acc = []
+    let val_acc = []
+    let loss = []
+    let val_loss = []
+
+    data.forEach(function (item){
+        acc.push(item['acc'])
+        val_acc.push(item['val_acc'])
+        loss.push(item['loss'])
+        val_loss.push(item['val_loss'])
+    })
+
+    plotLineChart(acc, val_acc, "Accuracy", "Validation Accuracy", 'current-accuracy-chart', true, true)
+    plotLineChart(loss, val_loss, "Loss", "Validation Loss", 'current-loss-chart')
+}
+
+function checkAndColour(elem, key, data, reverse = false) {
+    if (reverse) {
+        if (data[1][key] < data[0][key]) {
+            elem.style.color = "red"
+            elem.innerHTML += " <i class='fas fa-angle-up'></i>"
+        } else {
+            elem.style.color = "#007F0E"
+            elem.innerHTML += " <i class='fas fa-angle-down'></i>"
+        }
+    } else {
+        if (data[0][key] < data[1][key]) {
+            elem.style.color = "red"
+            elem.innerHTML += " <i class='fas fa-angle-down'></i>"
+        } else {
+            elem.style.color = "#007F0E"
+            elem.innerHTML += " <i class='fas fa-angle-up'></i>"
+        }
+    }
+}
+
+getHistory().then(function (data) {
     plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
     plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
 })
 
-getReport().then(function(data) {
+getReport().then(function (data) {
     plotReportChart(data, 'precision', 'precision-chart', true)
     plotReportChart(data, 'recall', 'recall-chart', true)
     plotReportChart(data, 'f1-score', 'f-chart', true)
     plotReportChart(data, 'support', 'support-chart')
 })
 
-getClasses().then(function(classes) {
+getClasses().then(function (classes) {
     fillTableHead(classes)
-    getConfusionMatrix().then(function(data) {
+    getConfusionMatrix().then(function (data) {
         table_body = document.createElement("tbody")
         for (let key in data) {
             let label = classes[key]

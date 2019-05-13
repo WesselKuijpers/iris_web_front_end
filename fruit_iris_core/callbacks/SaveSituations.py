@@ -1,7 +1,7 @@
 from keras.callbacks import Callback
 import json
 
-class SaveSituation(Callback):
+class SaveSituations(Callback):
     def __init__(self, epochs):
         self.epochs = epochs
 
@@ -17,12 +17,14 @@ class SaveSituation(Callback):
 
         situation = None
 
-        with open('static/model_history/situation.json', 'r') as file:
-            situation = json.load(file)
+        with open('static/model_history/situations.json', 'r') as file:
+            situations = json.load(file)
 
-        situation['previous_situation'] = situation['current_situation']
-        situation['current_situation'] = current_situation
+        new_situations = [current_situation]
 
-        with open('static/model_history/situation.json', 'w') as file:
-            json.dump(situation, file)
+        if (epoch != 0):
+            for situation in situations:
+                new_situations.append(situation)
 
+        with open('static/model_history/situations.json', 'w') as file:
+            json.dump(new_situations, file)

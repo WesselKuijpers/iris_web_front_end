@@ -16,6 +16,7 @@ from flask import current_app as app
 from sklearn.metrics import classification_report, confusion_matrix
 from keras.callbacks import ModelCheckpoint, RemoteMonitor
 from fruit_iris_core.callbacks.SaveSituation import SaveSituation
+from fruit_iris_core.callbacks.SaveSituations import SaveSituations
 
 
 
@@ -120,7 +121,7 @@ class Trainer:
     def train(self, model, train_generator, validation_generator):
 
         checkpoint = ModelCheckpoint('fruit_iris_core/models/mobilenet.h5py', monitor='val_acc', verbose=1, save_best_only=False, mode='max', save_weights_only=False)
-        save_situation = SaveSituation(epochs=self.epochs)
+        save_situations = SaveSituations(epochs=self.epochs)
         # try to train and save the model
         hist = model.fit_generator(
             generator=train_generator,
@@ -129,7 +130,7 @@ class Trainer:
             validation_data=validation_generator,
             validation_steps=1883 // self.batch_size,
             verbose=True,
-            callbacks=[checkpoint, save_situation])
+            callbacks=[checkpoint, save_situations])
 
         return hist
 

@@ -29,6 +29,6 @@ def insight_data_confusion_matrix():
 
 @insight_controller.route('/data/current_situation')
 def insight_data_current_situation():
-    with open('static/model_history/situation.json', 'r') as file:
+    with open('static/model_history/situations.json', 'r') as file:
         cs = json.load(file)
     return jsonify(cs)

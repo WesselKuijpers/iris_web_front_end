@@ -11,7 +11,7 @@ import threading
 # this file covers everything that needs to happen only once
 
 # boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = False
+should_train = True
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:

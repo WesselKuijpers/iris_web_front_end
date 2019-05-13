@@ -36,7 +36,7 @@ if should_train:
             pass
         else:
             app.helper.clear_session()
-            app.helper.load_model('fruit_iris_core/models/mobilenet.3.h5py')
+            app.helper.load_model('fruit_iris_core/models/mobilenet.h5py')
             print("MODEL: RELOADED")
 
     x = threading.Thread(target=listen_for_model_change, args=(event,))

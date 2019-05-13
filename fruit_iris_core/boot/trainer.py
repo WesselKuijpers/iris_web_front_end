@@ -62,7 +62,7 @@ class Trainer:
 
     def load_model(self):
         helper = PredictHelper()
-        helper.load_model('fruit_iris_core/models/mobilenet.3.h5py')
+        helper.load_model('fruit_iris_core/models/mobilenet.h5py')
         return helper.model
 
     def train_data_generator(self):
@@ -119,9 +119,9 @@ class Trainer:
 
     def train(self, model, train_generator, validation_generator):
 
-        checkpoint = ModelCheckpoint('fruit_iris_core/models/mobilenet.3.h5py', monitor='val_acc', verbose=1, save_best_only=False, mode='max', save_weights_only=False)
-        # try to train and save the model
+        checkpoint = ModelCheckpoint('fruit_iris_core/models/mobilenet.h5py', monitor='val_acc', verbose=1, save_best_only=False, mode='max', save_weights_only=False)
         save_situation = SaveSituation(epochs=self.epochs)
+        # try to train and save the model
         hist = model.fit_generator(
             generator=train_generator,
             steps_per_epoch=5516 // self.batch_size,

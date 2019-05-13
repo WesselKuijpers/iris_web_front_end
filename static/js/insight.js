@@ -239,32 +239,40 @@ function loadProgress() {
         current_accuracy.innerHTML = Math.round(data['current_situation']['acc'] * 100 * 10) / 10 + "%"
         if(data['current_situation']['acc'] < data['previous_situation']['acc']) {
             current_accuracy.style.color = "red"
+            current_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
         } else {
             current_accuracy.style.color = "#007F0E"
+            current_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
         }
 
         current_validation_accuracy = document.getElementById('current-validation-accuracy')
         current_validation_accuracy.innerHTML = Math.round(data['current_situation']['val_acc'] * 100 * 10) / 10 + "%"
         if(data['current_situation']['val_acc'] < data['previous_situation']['val_acc']) {
             current_validation_accuracy.style.color = "red"
+            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
         } else {
             current_validation_accuracy.style.color = "#007F0E"
+            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
         }
 
         current_loss = document.getElementById('current-loss')
         current_loss.innerHTML = Math.round(data['current_situation']['loss'] * 10000) / 10000
         if(data['current_situation']['loss'] > data['previous_situation']['loss']) {
             current_loss.style.color = "red"
+            current_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
         } else {
             current_loss.style.color = "#007F0E"
+            current_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
         }
 
         current_validation_loss = document.getElementById('current-validation-loss')
         current_validation_loss.innerHTML = Math.round(data['current_situation']['val_loss'] * 10000) / 10000
         if(data['current_situation']['val_loss'] > data['previous_situation']['val_loss']) {
             current_validation_loss.style.color = "red"
+            current_validation_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
         } else {
             current_validation_loss.style.color = "#007F0E"
+            current_validation_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
         }
     })
 }

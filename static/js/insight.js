@@ -89,7 +89,7 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
     })
 }
 
-function plotReportChart(json_data, data_key, id) {
+function plotReportChart(json_data, data_key, id, percentage = false) {
     let chart = document.getElementById(id).getContext('2d');
 
     keys= []
@@ -97,7 +97,11 @@ function plotReportChart(json_data, data_key, id) {
     for (let key in json_data) {
         if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
             keys.push(key)
-            data.push(json_data[key][data_key] * 100)
+            if (percentage) {
+                data.push(json_data[key][data_key] * 100)
+            } else {
+                data.push(json_data[key][data_key])
+            }
         }
     }
 
@@ -119,79 +123,9 @@ function plotReportChart(json_data, data_key, id) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        min: Math.min(...data) - 10
+                        beginAtZero: true
                     }
                 }]
-            }
-        }
-    })
-}
-
-function plotSupportChart(json_data) {
-    let chart = document.getElementById('support-chart').getContext('2d');
-
-    keys= []
-    data = []
-    for (let key in json_data) {
-        if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
-            keys.push(key)
-            data.push(json_data[key]["support"])
-        }
-    }
-
-    let myChart = new Chart(chart, {
-        type: 'doughnut',
-        data: {
-            labels: keys,
-            datasets: [
-                {
-                    data: data,
-                    backgroundColor: ["#DD4B39", 
-                                      "#000000", 
-                                      "#ff0000", 
-                                      "#c0c0c0", 
-                                      "#404040", 
-                                      "#7f0000", 
-                                      "#bc0000", 
-                                      "#606060",
-                                      "#5b0000",
-                                      "#350000",
-                                      "#8b6969",
-                                      "#cd9b9b",
-                                      "#802a2a",
-                                      "#a52a2a",
-                                      "#EE2c2c",
-                                      "#600000",
-                                      "#330000",
-                                      "#e60000",
-                                      "#ff4141",
-                                      "#ffbbbb",
-                                      "#fee8e7",
-                                      "#e3170d",
-                                      "#e7dddc",
-                                      "#FF664D",
-                                      "#ffe8e6",
-                                      "#8b7d7b",
-                                      "#8A3324",
-                                      "#C1AEA8",
-                                      "#FF5721",
-                                      "#5E2612",
-                                      "#5C4033",
-                                      "#FF6600",
-                                      "#B78D6F",
-                                      "#D0CECD",
-                                      "#FFE2C8",
-                                      "#B67C3D",
-                                      "#DFC9AC",
-                                      "#FFA114"
-                                    ]
-                }
-            ]
-        },
-        options: {
-            legend: {
-                display: true,
-                position: "bottom"
             }
         }
     })
@@ -283,10 +217,10 @@ getHistory().then(function(data) {
 })
 
 getReport().then(function(data) {
-    plotReportChart(data, 'precision', 'precision-chart')
-    plotReportChart(data, 'recall', 'recall-chart')
-    plotReportChart(data, 'f1-score', 'f-chart')
-    plotSupportChart(data)
+    plotReportChart(data, 'precision', 'precision-chart', true)
+    plotReportChart(data, 'recall', 'recall-chart', true)
+    plotReportChart(data, 'f1-score', 'f-chart', true)
+    plotReportChart(data, 'support', 'support-chart')
 })
 
 getClasses().then(function(classes) {

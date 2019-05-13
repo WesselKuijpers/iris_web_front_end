@@ -7,11 +7,11 @@ from router import Router
 import asyncio
 import threading
 
+
 # this file covers everything that needs to happen only once
 
-
 # boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = True
+should_train = False
 
 # if the trainingprocess should commence, configure the trainer and start
 if should_train:
@@ -29,7 +29,6 @@ app = Server().start()
 # register all the routes/blueprints in the router file
 Router().register()
 
-
 if should_train:
     def listen_for_model_change(event):
         while not event.is_set():
@@ -41,3 +40,4 @@ if should_train:
 
     x = threading.Thread(target=listen_for_model_change, args=(event,))
     x.start()
+

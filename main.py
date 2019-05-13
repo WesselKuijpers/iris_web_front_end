@@ -3,28 +3,41 @@ from fruit_iris_core.boot.trainer import Trainer
 import multiprocessing as mp
 from keras import backend as K
 import tensorflow as tf
+from router import Router
+import asyncio
+import threading
 
 # this file covers everything that needs to happen only once
 
 
-# configuring the Tensorflow option to consume only a limited amount of GPU memory
-# pass it to keras as the current session
-# this is done to prevent OOM errors
-gpu_options = tf.GPUOptions(
-    per_process_gpu_memory_fraction=0.8, allow_growth=True)
-sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-K.set_session(sess)
+# boolean, can be flipped to indicate that the trainingprocesss should start
+should_train = True
+
+# if the trainingprocess should commence, configure the trainer and start
+if should_train:
+    training = Trainer(epochs=100, 
+                    batch_size=32, 
+                    train_dir='dataset/train', val_dir='dataset/train', test_dir='dataset/test', 
+                    width=224, height=224)
+    event = mp.Event()
+    training.start(event)
+
 
 # start the server
 app = Server().start()
 
-# boolean, can be flipped to indicate that the trainingprocesss should start
-should_train = False
+# register all the routes/blueprints in the router file
+Router().register()
 
-# if the trainingprocess should commence, configure the trainer and start
+
 if should_train:
-    train = Trainer(epochs=5, 
-                    batch_size=32, 
-                    train_dir='dataset/train', val_dir='dataset/test', 
-                    width=224, height=224)
-    train.start()
+    def listen_for_model_change(event):
+        while not event.is_set():
+            pass
+        else:
+            app.helper.clear_session()
+            app.helper.load_model('fruit_iris_core/models/mobilenet.h5py')
+            print("MODEL: RELOADED")
+
+    x = threading.Thread(target=listen_for_model_change, args=(event,))
+    x.start()

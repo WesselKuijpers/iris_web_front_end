@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Stachanov IRIS</title>
+    <title>Argos IRIS</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -26,19 +26,26 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <!-- custom js -->
+    <script src="{{ url_for('static', filename='js/translate.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
+    <!-- custom css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 
-<body id='body' onload="fillCategoricalSelect()">
+<body id='body' onload="load()">
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4">
-                <h5 class="text-white h4">Stachanov IRIS</h5>
-                <a class="text-white nav-link" href="/">Home</a>
-                <a class="text-white nav-link" href="/insight">Insights</a>
-                <a class="text-white nav-link" href="/rate">Rate</a>
+                <h5 class="text-white h4">Argos IRIS</h5>
+                <a class="text-white nav-link" id="base.navbar.link.home" href="/">Home</a>
+                <a class="text-white nav-link" id="base.navbar.link.insight" href="/insight">Insights</a>
+                <a class="text-white nav-link" id="base.navbar.link.rate" href="/rate">Rate</a>
+                
             </div>
         </div>
         <nav class="navbar navbar-dark bg-dark">
@@ -47,35 +54,13 @@
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span><i class="fas fa-bars menu-icon"></i></span>
             </button>
+            <div class="col-5 col-lg-2">
+                <select class="form-control" onchange="setLanguage(this.value)" id="language-select">
+                </select>
+            </div>
         </nav>
-        <div id="footer">
-            <div class="argos-logo"><img src="{{ url_for('static', filename='img/argos.png') }}"></div>
-            <p>
-                Stachnov Solutions & Service BV
-                <br>
-                Lamonggracht 7
-                <br>
-                1019 RD Amsterdam
-                <br>
-                The Nederlnads
-                <br>
-                T +31 20 509 10 10
-                <br>
-                E-mail: info@stachanov.com
-            </p>
-
-
-
-            © Copyright 2013 Stachanov (v2.0). All rights reserved | General terms of service.
-
-
-        </div>
     </div>
-
-
-
     {% block content %}{% endblock %}
-
 </body>
 
 </html>

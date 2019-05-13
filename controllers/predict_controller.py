@@ -11,44 +11,44 @@ predict_controller = Blueprint('predict_controller', __name__)
 
 # TODO: find some better way to do this
 classes = [
-    'Apple, Scab',
     'Apple, Black Rot',
     'Apple, Cedar Rust',
     'Apple, Healthy',
+    'Apple, Scab',
+    'Bell Pepper, Bacterial Spot',
+    'Bell Pepper, Healthy',
     'Blueberry, Healthy',
-    'Cherry, Powdery Mildew',
     'Cherry, Healthy',
-    'Maize, Cercospora Leaf Spot',
-    'Maize, Common Rust',
-    'Maize, Northern Leaf Blight',
-    'Maize, Healthy',
+    'Cherry, Powdery Mildew',
     'Grape, Black Rot',
     'Grape, Esca',
-    'Grape, Leaf Blight',
     'Grape, Healthy',
+    'Grape, Leaf Blight',
+    'Maize, Cercospora Leaf Spot',
+    'Maize, Common Rust',
+    'Maize, Healthy',
+    'Maize, Northern Blight',
     'Orange, Citrus Greening',
     'Peach, Bacterial Spot',
     'Peach, Healthy',
-    'Bell Pepper, Bacterial Spot',
-    'Bell Pepper, Healthy',
     'Potato, Early Blight',
-    'Potato, Late Blight',
     'Potato, Healthy',
+    'Potato, Late Blight',
     'Raspberry, Healthy',
     'Soybean, Healthy',
     'Squash, Powdery mildew',
-    'Strawberry, Leaf Scorch',
     'Strawberry, Healthy',
+    'Strawberry, Leaf Scorch',
     'Tomato, Bacterial Spot',
     'Tomato, Early Blight',
+    'Tomato, Healthy',
     'Tomato, Late Blight',
     'Tomato, Leaf Mold',
+    'Tomato, Mosaic Virus',
     'Tomato, Septoria Leaf Spot',
     'Tomato, Spider Mites',
     'Tomato, Target Spot',
     'Tomato, Yellow Leaf Curl Virus',
-    'Tomato, Mosaic Virus',
-    'Tomato, Healthy'
 ]
 
 
@@ -85,7 +85,7 @@ def get_classes():
 def predict_save():
     absolute_category = request.form['category'].replace(',', '').replace(' ', '_').lower()
     name = request.form['location'].replace('static/img/cache/', '')
-    path = 'dataset/' + absolute_category + '/' + name
+    path = 'dataset/train' + absolute_category + '/' + name
     
     os.rename(request.form['location'], path)
 

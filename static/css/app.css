@@ -122,3 +122,40 @@ select {
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
+
+body {
+    background-image: url('/static/img/argos.png');
+    background-repeat: no-repeat;
+    background-position: right 10px bottom 10px;
+    background-attachment: fixed !important;
+    background-size: 30px auto;
+}
+
+.card {
+    border-radius: 0 !important;
+    /* height: 100% !important; */
+}
+
+.jumbotron {
+    background-color: transparent !important;
+    padding-bottom: 0 !important;
+    padding-top: 2rem !important;
+    margin-bottom: 0 !important;
+}
+
+th {
+    border: 0 !important;
+}
+
+.progress-bar {
+    background-color: #dd4b39;
+    color: black;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}

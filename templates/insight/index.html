@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4" id="insight.jumbotron.title">Argos IRIS Insights</h1>
+                <p class="lead" id="insight.jumbotron.lead">
+                    This page contains all the information about the inner workings of Argos IRIS, as well as metrics
+                    calculated on the model.
+                    <br>
+                    The data on this page is constantly updated with the latest metrics, because the model is constantly
+                    adapting to new data.
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12 col-lg-6">
+            <h3 id="insight.training-explanation.title">How does Argos IRIS work</h3>
+            <p id="insight.training-explanation.content">
+                When a prediction is made using Argos IRIS and the survey is subsequently answered, new data is added to our dataset.
+                This data in itself is not improving the model yet. The model (needed to make predictions) needs to update itself with the new knowledge.
+                To do this a so-called training process is started. 
+                <br>
+                This process runs continuously, and asyncronously with our prediction service so that the user experience is not hindered in any way.
+                <br>
+                <br>
+                The model that we use is a deeply trained MobileNet model. This model is made out of several layers with their own responsibility.
+                <br>
+                When a prediction is made a single image is passed through these layers and a so-called 'feature map' is created containing indexes of similarity with known patterns.
+                This 'feature map' will be compared with known classes and based on that a prediction will be given.
+                <br>
+                <br>
+                During a training process a stream of images is fed into the model, again, the model makes a prediction per image. Now the correct label is also given to the model.
+                <br>
+                The model can now update it's 'weights' so that the patterns that were discerned in the image can be used to recognise images of the same class in the future.
+                This process continues, and so the model 'learns' new patterns.
+                <br>
+                This process repeats for each image in the dataset, and for 100 iterations (or Epochs). After this process is completed the model will be loaded into the prediction service,
+                some metrics will be generated and the training process will restart. 
+            </p>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <h3 id="insight.current-training.title">Current training</h3>
+            <p id="insight.current-training.lead">
+                The model that we use to make predictions is constantly improving. The metrics below give insight into
+                the training that is currently being conducted.
+            </p>
+            <p>
+                <strong id="insight.current-training.progress.title">Progress: </strong>
+            </p>
+            <div class="row">
+                <div class="col-1 text-center">
+                    <i class="fas fa-sync" onclick="loadProgress()"></i>
+                </div>
+                <div class="col-11">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 90%" id="epoch-progress"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-4">
+                <strong id="insight.current-training.metrics.title">Metrics:</strong>
+            </p>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 id="insight.current-training.metrics.accuracy">Accuracy </h5>
+                            <i id="accuracy-popover" class="fas fa-info-circle" data-toggle="popover"
+                                data-placement="bottom" data-content="<p id='insight.current-situation.metrics.accuracy.popover'>
+                                                                        The accuracy of a model is usually determined after the model parameters are learned and fixed
+                                                                        and no learning is taking place. Then the test samples are fed to the model and the number of
+                                                                        mistakes (zero-one loss) the model makes are recorded, after comparison to the true targets.
+                                                                        Then the percentage of misclassification is calculated.
+                                                                        <br>
+                                                                        For example, if the number of test samples is 1000 and model classifies 952 of those correctly,
+                                                                        then the model's accuracy is 95.2%.
+                                                                        <br>
+                                                                        Higher is better.<p>" data-html="true"
+                                data-trigger="manual" onclick="togglePopOver(this)"></i>
+                            <hr>
+                            <h1 id='current-accuracy'></h1>
+                            <br>
+                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 id="insight.current-training.metrics.validation-accuracy">Validation Accuracy</h5>
+                            <i id="val-accuracy-popover" class="fas fa-info-circle" data-toggle="popover"
+                                data-placement="bottom"
+                                data-content="<p id='insight.current-situation.metrics.validation-accuracy.popover'>
+                                                                        The validation accuracy metric is calculated in the same way the accuracy is. 
+                                                                        <br>
+                                                                        The difference is that the validation accuracy is calculated on data that the model has never 'seen' before. 
+                                                                        <br>
+                                                                        For a perfect model this should be the same as the accuracy but in practice this rarely happens<p>"
+                                data-html="true" data-trigger="manual" onclick="togglePopOver(this)"></i>
+                            <hr>
+                            <h1 id='current-validation-accuracy'></h1>
+                            <br>
+                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 id="insight.current-training.metrics.loss">Loss</h5>
+                            <i id="loss-popover" class="fas fa-info-circle" data-toggle="popover"
+                                data-placement="bottom" data-content="<p id='insight.current-situation.metrics.loss.popover'>
+                                                                        Loss value implies how well or poorly a certain model behaves after each iteration of optimization. 
+                                                                        Ideally, one would expect the reduction of loss after each, or several, iteration(s). 
+                                                                        Loss is often used in the training process to find the 'best' parameter values for your model (e.g. weights in neural network). 
+                                                                        It is what you try to optimize in the training by updating weights.
+                                                                        <br>
+                                                                        Lower is better.<p>" data-html="true"
+                                data-trigger="manual" onclick="togglePopOver(this)"></i>
+                            <hr>
+                            <h1 id='current-loss'></h1>
+                            <br>
+                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 id="insight.current-training.metrics.validation-loss">Validation Loss</h5>
+                            <i id="val-loss-popover" class="fas fa-info-circle" data-toggle="popover"
+                                data-placement="bottom"
+                                data-content="<p id='insight.current-situation.metrics.validation-loss.popover'>
+                                                                        The validation loss is calculated the same way the loss is calculated, 
+                                                                        it is different because the validation is calculated on data that the model has never seen before. 
+                                                                        In the perfect situation the validation loss should be the same as the loss, but this rarely happens<p>"
+                                data-html="true" data-trigger="manual" onclick="togglePopOver(this)"></i>
+                            <hr>
+                            <h1 id='current-validation-loss'></h1>
+                            <br>
+                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 id="insight.accuracy-and-loss.intro.title">Accuracy and Loss</h3>
+            <p id="insight.accuracy-and-loss.intro.lead">
+                Below you will find the metrics for the accuracy and loss of the current model during the previous
+                training
+                process.
+                <br>
+                The lines labled 'training accuracy' and 'training loss' contain the metrict during the actual process
+                with data that the model has 'seen' before.
+                <br>
+                The lines labled 'validation accuracy' and 'validation loss' show how the model preformed in predicting
+                data that was never seen before.
+                <br>
+                Ideally, the validation line should closely follow the training line.
+            </p>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.accuracy-and-loss.accuracy.title">Accuracy</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.accuracy-and-loss.accuracy.subtitle">Higher is
+                        better, in percentage</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="accuracy-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text" id="insight.accuracy-and-loss.accuracy.explanation">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.accuracy-and-loss.loss.title">Loss</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.accuracy-and-loss.loss.subtitle">Lower is
+                        better</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="loss-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text" id="insight.accuracy-and-loss.loss.explanation">
+                        Loss value implies how well or poorly a certain model behaves after each iteration of
+                        optimization. Ideally, one would expect the reduction of loss after each, or several,
+                        iteration(s).
+                        <br>
+                        Loss is often used in the training process to find the "best" parameter values for your model
+                        (e.g. weights in neural network). It is what you try to optimize in the training by updating
+                        weights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <h3 id="insight.classification-report.intro.title">Classification Report</h3>
+            <p id="insight.classification-report.intro.lead">
+                When a training process is finished a report is generated to validate the precision of the model.
+                <br>
+                This report is generated by running 10402 images the model has never seen before by it. The model then
+                gives it's prediction, the outcome of this, matched with the actual label of the respective images, is
+                fed into several mathematical functions returning the metrics below.
+            </p>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.classification-report.support.title">Support</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.support.subtitle">How
+                        many images exist inside each category of the test set</h6>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <canvas id="support-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.classification-report.precision.title">Per class precision</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.precision.subtitle">in
+                        percentages</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="precision-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text" id="insight.classification-report.precision.explanation">
+                        Precision – Accuracy of positive predictions.
+                        <br>
+                        The precision is being calculated with the following formula:
+                    </p>
+                    <div class="text-center">
+                        <h5 id="insight.classification-report.precision.formula">Precision = True Positives / (True
+                            Positives + False Positives)</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.classification-report.recall.title">Per class recal score</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.recall.subtitle">in
+                        percentages</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="recall-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text" id="insight.classification-report.recall.explanation">
+                        Recall (sensitivity or true positive rate) – Fraction of positives That were correctly
+                        identified.
+                        <br>
+                        The Recall Score is being calculated with the following formula:
+                    </p>
+                    <div class="text-center">
+                        <h5 id="insight.classification-report.recall.formula">Precision = True Positives / (True
+                            Positives + False Negatives)</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.classification-report.f1.title">Per class F1 score</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.f1.subtitle">in
+                        percentages</h6>
+                    <br>
+                    <div class="text-center">
+                        <canvas id="f-chart"></canvas>
+                    </div>
+                    <hr>
+                    <p class="card-text" id="insight.classification-report.f1.explanation">
+                        F1 Score (F-Score or F-Measure) – A metric for comparing two classifiers. F1 Score
+                        takes into account precision and the recall. It is created by finding the the harmonic mean of
+                        precision and recall.
+                        <br>
+                        The F1 Score is being calculated with the following formula:
+                    </p>
+                    <div class="text-center">
+                        <h5 id="insight.classification-report.f1.formula">F1 = 2 x (precision x recall)/(precision +
+                            recall)</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <h3 id="insight.confusion-matrix.intro.title">Confusion Matrix</h3>
+            <p id="insight.confusion-matrix.intro.lead">
+                When a training process is finished a confusion matrix is generated to give a better insight in the
+                precision of the model.
+                <br>
+                The confusion matrix shows how often certain classes are predicted and how images are misclassified.
+                Ideally a digagonal 'line' should be discernable in the confusion matrix.
+            </p>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="insight.confusion-matrix.table.title">Confusion Matrix</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.confusion-matrix.table.subtitle">
+                        A matrix, labeled by class
+                    </h6>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table" id="confusion-matrix">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/insight.js') }}"></script>
+<script>
+    $(function () {
+        $("#accuracy-popover").popover('show')
+        $("#val-accuracy-popover").popover('show')
+        $("#loss-popover").popover('show')
+        $("#val-loss-popover").popover('show')
+    });
+
+    $('#accuracy-popover').on('shown.bs.popover', function () {
+        id = $(this).data('bs.popover').tip.id
+        $("#" + id).addClass('hidden')
+    })
+
+    $('#val-accuracy-popover').on('shown.bs.popover', function () {
+        id = $(this).data('bs.popover').tip.id
+        $("#" + id).addClass('hidden')
+    })
+
+    $('#loss-popover').on('shown.bs.popover', function () {
+        id = $(this).data('bs.popover').tip.id
+        $("#" + id).addClass('hidden')
+    })
+
+    $('#val-loss-popover').on('shown.bs.popover', function () {
+        id = $(this).data('bs.popover').tip.id
+        $("#" + id).addClass('hidden')
+    })
+
+    // required for popovers to work
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
+{% endblock %}

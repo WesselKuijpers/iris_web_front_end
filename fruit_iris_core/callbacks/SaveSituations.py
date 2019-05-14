@@ -1,10 +1,19 @@
-from keras.callbacks import Callback
 import json
 
+from keras.callbacks import Callback
+
+# a class containing a method specifying a custom callback on epoch end saving the current situation to a file
+# extends: keras.callbacks.Callback
+# INT epochs, a natural number indicating for how much iterations the training will be runnning
+# returns: VOID
 class SaveSituations(Callback):
     def __init__(self, epochs):
         self.epochs = epochs
 
+    # method that defines a callback on epoch end to save the current situation
+    # INT epoch, a natural number representing the current iteration of the training (required by extension)
+    # <UNKNOWN> logs, log of the current training iteration (required by extension)
+    # returns: VOID
     def on_epoch_end(self, epoch, logs={}):
         cepoch = epoch + 1
         current_situation = {}

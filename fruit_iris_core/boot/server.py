@@ -2,14 +2,14 @@ import os
 
 import keras.backend as K
 import tensorflow as tf
-from flask import Blueprint, Flask, g
-
-import controllers
+from flask import Flask
 
 from fruit_iris_core.error_handler import errors
 from helpers.predict_helper import PredictHelper
 
 
+# class containing methods for starting the FLASK webserver
+# all methods are called in order by calling the start() method
 class Server:
     def __init__(self):
         # specify directory for template and static files
@@ -17,8 +17,11 @@ class Server:
         static_dir = os.path.abspath('static')
 
         # initiate the app
-        self.app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+        self.app = Flask(__name__, template_folder=template_dir,
+                         static_folder=static_dir)
 
+    # method for calling all methods to start the FLASK webserver
+    # returns: VOID
     def start(self):
         # configuring the Tensorflow option to consume only a limited amount of GPU memory
         # pass it to keras as the current session
@@ -39,11 +42,15 @@ class Server:
             print("AN ERROR OCCURED")
             raise
 
+    # method for loading the PredictHelper() class into the application context
+    # then load the model into the application context's helper 
+    # this model can be used all across the web-app so that the model does not need to be loaded at every request
+    # returns: BOOL
     def load_helper(self):
         # instantiate the predicthelper class
         self.app.helper = PredictHelper()
-        # load the model
 
+        # load the model
         self.app.helper.load_model('fruit_iris_core/models/mobilenet.h5py')
 
         # if the model is loaded, let the sun shine, else let the user know an error occured
@@ -55,6 +62,9 @@ class Server:
             print("ERROR: MODEL COULD NOT BE LOADED")
             return False
 
+    # method for cleaning the images in the 'static/image/chache' folder
+    # this only happens to images that were not transferred to the respective dataset directory
+    # returns: BOOL
     def clean_cache(self):
         # clean all the images that were saved for prediction purposes
         path = 'static/img/cache/'
@@ -72,6 +82,8 @@ class Server:
             print("ERROR: FILECACHE COULD NOT BE CLEANED")
             return False
 
+    # method for registering the error handlers in the 'fruit_iris_core/error_handler.py' file
+    # returns: VOID
     def register_error_handlers(self):
         # register the error handler
         self.app.register_blueprint(errors)

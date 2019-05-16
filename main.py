@@ -42,5 +42,5 @@ if should_train:
             print("MODEL: RELOADED")
 
     # load the eventlistener function into a multithreading thread so that it can be ran asynchronously with the FLASK webserver
-    x = threading.Thread(target=listen_for_model_change, args=(event,))
-    x.start()
+    thread = threading.Thread(target=listen_for_model_change, args=(event,))
+    thread.start()

@@ -32,6 +32,7 @@ class PredictHelper:
     # method for reshaping an inputted image
     # request.files.Image image, an image from the request
     # returns: NDARRAY, STRING 
+    # TODO: make width and height a parameter, instead of hardcoded
     def reshape_image(self, image):
         # save the image from the request
         image_path = 'static/img/cache/' + str(uuid.uuid4()) + '.png'

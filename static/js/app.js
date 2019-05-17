@@ -63,7 +63,7 @@ function reset() {
 }
 
 // function for showing the survey form
-// ELEMENT elem, the html element that is to be altered
+// ELEMENT elem, the html element that containes required data
 // returns: VOID
 function showForm(elem) {
     document.getElementById('result-form').classList.add('hidden')
@@ -96,7 +96,7 @@ function showMessage(elem) {
 }
 
 // function for filling the categorical select in the survey
-// ARRAY data, data from the get classes api call
+// OBJECT data, data from the get classes api call
 // returns: VOID
 function fillForm(data) {
     newData = JSON.parse(data)

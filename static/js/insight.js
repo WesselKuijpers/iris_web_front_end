@@ -1,6 +1,8 @@
 // async funtions for fetching the required data
+// TODO: condense these functions
+
 // history
-// returns: ARRAY
+// returns: OBJECT
 async function getHistory() {
     let response = await fetch('/insight/data/history')
     let data = await response.json()
@@ -8,7 +10,7 @@ async function getHistory() {
 }
 
 // classification report
-// returns: ARRAY
+// returns: OBJECT
 async function getReport() {
     let response = await fetch('/insight/data/report')
     let data = await response.json()
@@ -16,7 +18,7 @@ async function getReport() {
 }
 
 // predict classes
-// returns: ARRAY
+// returns: OBJECT
 async function getClasses() {
     let response = await fetch('/predict/classes')
     let data = await response.json()
@@ -24,7 +26,7 @@ async function getClasses() {
 }
 
 //confusion matrix
-// returns: ARRAY
+// returns: OBJECT
 async function getConfusionMatrix() {
     let response = await fetch('/insight/data/confusion_matrix')
     let data = await response.json()
@@ -32,7 +34,7 @@ async function getConfusionMatrix() {
 }
 
 // current training data
-// returns: ARRAY
+// returns: OBJECT
 async function getCurrentSituation() {
     let response = await fetch('/insight/data/current_situation')
     let data = await response.json()
@@ -41,10 +43,10 @@ async function getCurrentSituation() {
 
 // function for plotting a line chart for history objects
 // takes:
-// ARRAY train, train data
-// ARRAY val, validation data
-// ARRAY trainLabel, train data labels
-// ARRAY valLabel, validation data labels
+// OBJECT train, train data
+// OBJECT val, validation data
+// STRING trainLabel, train data label
+// STRING valLabel, validation data label
 // STRING id, the id of the canvas that should be a chart
 // BOOL percentage, specify if the data in train and val arrays should be converted to percentages
 // BOOL startAtZero, specify if the charts Y-axis should start at 0
@@ -116,7 +118,7 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
 }
 
 // function for plotting bar charts for the classification report
-// ARRAY json_data, classification report api call data
+// OBJECT json_data, classification report api call data
 // STRING data_key, what sub-array of the json_data array should be used in the graph E.G: 'support' of 'f1'
 // STRING id, the id of the canvas that should be a chart
 // BOOL percentage, whether the data from the json_data should be converted to a percentage
@@ -167,7 +169,7 @@ function plotReportChart(json_data, data_key, id, percentage = false) {
 }
 
 // a function for filling the confusion matrix head
-// ARRAY data, data from the confusion matrix api call
+// OBJECT data, data from the confusion matrix api call
 // returns: VOID
 function fillTableHead(data) {
     // get and create required elements
@@ -192,9 +194,9 @@ function fillTableHead(data) {
 
 // function for creating a row in the confusion matrix
 // STRING label, the leftmost item of the row
-// ARRAY row, the data the row should be filled with
+// OBJECT row, the data the row should be filled with
 // returns: 'tr' element
-function createTableRows(label, row) {
+function createTableRow(label, row) {
     // create a table row
     let table_row = document.createElement("tr")
     // fill it
@@ -210,7 +212,7 @@ function createTableRows(label, row) {
     return table_row
 }
 
-// function for updating the porgress metrics of the current situation
+// function for updating the progress metrics of the current situation
 // is stored in a variable to be called at an interval
 // returns: VOID
 lp = function loadProgress() {
@@ -253,7 +255,7 @@ lp = function loadProgress() {
 }
 
 // function for filling the graphs concerning the current training process
-// ARRAY data, data from the current situation api call
+// OBJECT data, data from the current situation api call
 // returns: VOID
 function fillCurrentSituationGraphs(data) {
     // metric arrays
@@ -280,7 +282,7 @@ function fillCurrentSituationGraphs(data) {
 // if not, colour it red
 // ELEMENT elem, the html element that should be coloured
 // STRING key, the key of the sub-array that should taken from the data array
-// ARRAY data, the data from the current situation api call
+// OBJECT data, the data from the current situation api call
 // BOOL reverse, indicates if the value needs to be higher or lower then the previous situation to be coloured green
 // returns: VOID
 function checkAndColour(elem, key, data, reverse = false) {
@@ -344,7 +346,7 @@ getClasses().then(function (classes) {
         for (let key in data) {
             let label = classes[key]
             let row = data[key]
-            let table_row = createTableRows(label, row)
+            let table_row = createTableRow(label, row)
             table_body.appendChild(table_row)
         }
         document.getElementById('confusion-matrix').appendChild(table_body)

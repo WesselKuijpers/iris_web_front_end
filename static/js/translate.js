@@ -1,5 +1,5 @@
 // async function for making an api call to fetch the translation data
-// returns: ARRAY
+// returns: OBJECT
 async function getTranslation() {
     let response = await fetch('/translate/')
     let data = await response.json()

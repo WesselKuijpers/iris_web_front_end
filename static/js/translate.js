@@ -1,11 +1,3 @@
-// async function for making an api call to fetch the translation data
-// returns: OBJECT
-async function getTranslation() {
-    let response = await fetch('/translate/')
-    let data = await response.json()
-    return data
-}
-
 // function for making an api call fetching the translations an replacing the corresponding keys
 // returns: VOID
 function translatePage() {
@@ -15,7 +7,7 @@ function translatePage() {
     console.log(lng)
 
     // get the translation by the formatted cookie and replacing the element by key
-    getTranslation().then(function (data) {
+    getApiData('/translate/').then(function (data) {
         let curr_language = data[lng]["translations"]
 
         for (let item in curr_language) {

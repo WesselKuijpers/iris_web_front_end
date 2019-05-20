@@ -72,14 +72,20 @@ a:hover {
 #footer {
     bottom: 0;
     width: 100%;
-    height: 12rem;
+    /* height: 12rem; */
     background-color: #18181840;
     font-size: 13px;
 }
 
 .copy-box {
-    padding-top: 160px !important;
+    /* padding-top: 160px !important; */
     color: black;
+    position: relative;
+}
+
+.copy-box-text {
+    bottom: 10px !important;
+    position: absolute;
 }
 
 .text {
@@ -138,23 +144,18 @@ select {
     border-radius: 0 !important;
 }
 
-.argos {
-    padding-top: 25px;
+.argos-box {
+    position: relative;
 }
 
-
-/*.logo {
-    
-    background-repeat: no-repeat;
-    background-position: right 10px bottom 10px;
-    background-attachment: fixed !important;
-    background-size: 30px auto;*/
-
-
+.argos-image {
+    position: absolute;
+    bottom: 10px !important;
+    right: 10px !important;
 }
+
 .card {
     border-radius: 0 !important;
-    /* height: 100% !important; */
 }
 .jumbotron {
     background-color: transparent !important;
@@ -174,9 +175,4 @@ th {
 }
 .green {
     color: green;
-}
-
-/*Home page spatie*/
-.home-spatie {
-    height: 150px;
 }

@@ -26,7 +26,7 @@ function fillLanguageSelect() {
     var lng = getLanguageCookie()
 
     // get all the translations and fill the select with them
-    getTranslation().then(function (data) {
+    getApiData('/translate/').then(function (data) {
         let languages = Object.entries(data)
         let dropdown = document.getElementById("language-select")
         languages.forEach(function (language) {

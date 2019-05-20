@@ -1,36 +1,17 @@
-async function getHistory() {
-    let response = await fetch('/insight/data/history')
-    let data = await response.json()
-    return data
-}
-
-async function getReport() {
-    let response = await fetch('/insight/data/report')
-    let data = await response.json()
-    return data
-}
-
-async function getClasses() {
-    let response = await fetch('/predict/classes')
-    let data = await response.json()
-    return data
-}
-
-async function getConfusionMatrix() {
-    let response = await fetch('/insight/data/confusion_matrix')
-    let data = await response.json()
-    return data
-}
-
-async function getCurrentSituation() {
-    let response = await fetch('/insight/data/current_situation')
-    let data = await response.json()
-    return data
-}
-
+// function for plotting a line chart for history objects
+// takes:
+// OBJECT train, train data
+// OBJECT val, validation data
+// STRING trainLabel, train data label
+// STRING valLabel, validation data label
+// STRING id, the id of the canvas that should be a chart
+// BOOL percentage, specify if the data in train and val arrays should be converted to percentages
+// BOOL startAtZero, specify if the charts Y-axis should start at 0
+// returns: VOID
 function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false, startAtZero = false) {
     let chart = document.getElementById(id).getContext('2d');
 
+    // if the percentage bool is true convert it to percentages
     if (percentage) {
         let train_percent = []
         let val_percent = []
@@ -47,6 +28,7 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
         val = val_percent
     }
 
+    // plot the chart
     let myChart = new Chart(chart, {
         type: 'line',
         data: {
@@ -84,23 +66,39 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
                         labelString: 'epochs'
                     }
                 }]
+            },
+            animation: {
+                duration: 0
             }
         }
     })
 }
 
-function plotReportChart(json_data, data_key, id) {
+// function for plotting bar charts for the classification report
+// OBJECT json_data, classification report api call data
+// STRING data_key, what sub-array of the json_data array should be used in the graph E.G: 'support' of 'f1'
+// STRING id, the id of the canvas that should be a chart
+// BOOL percentage, whether the data from the json_data should be converted to a percentage
+// returns: VOID
+function plotReportChart(json_data, data_key, id, percentage = false) {
     let chart = document.getElementById(id).getContext('2d');
 
-    keys= []
+    keys = []
     data = []
+
+    // fill the keys and data arrays with the required data
     for (let key in json_data) {
         if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
             keys.push(key)
-            data.push(json_data[key][data_key] * 100)
+            if (percentage) {
+                data.push(json_data[key][data_key] * 100)
+            } else {
+                data.push(json_data[key][data_key])
+            }
         }
     }
 
+    // plot the chart
     let myChart = new Chart(chart, {
         type: 'bar',
         data: {
@@ -119,7 +117,7 @@ function plotReportChart(json_data, data_key, id) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        min: Math.min(...data) - 10
+                        beginAtZero: true
                     }
                 }]
             }
@@ -127,86 +125,22 @@ function plotReportChart(json_data, data_key, id) {
     })
 }
 
-function plotSupportChart(json_data) {
-    let chart = document.getElementById('support-chart').getContext('2d');
-
-    keys= []
-    data = []
-    for (let key in json_data) {
-        if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
-            keys.push(key)
-            data.push(json_data[key]["support"])
-        }
-    }
-
-    let myChart = new Chart(chart, {
-        type: 'doughnut',
-        data: {
-            labels: keys,
-            datasets: [
-                {
-                    data: data,
-                    backgroundColor: ["#DD4B39", 
-                                      "#000000", 
-                                      "#ff0000", 
-                                      "#c0c0c0", 
-                                      "#404040", 
-                                      "#7f0000", 
-                                      "#bc0000", 
-                                      "#606060",
-                                      "#5b0000",
-                                      "#350000",
-                                      "#8b6969",
-                                      "#cd9b9b",
-                                      "#802a2a",
-                                      "#a52a2a",
-                                      "#EE2c2c",
-                                      "#600000",
-                                      "#330000",
-                                      "#e60000",
-                                      "#ff4141",
-                                      "#ffbbbb",
-                                      "#fee8e7",
-                                      "#e3170d",
-                                      "#e7dddc",
-                                      "#FF664D",
-                                      "#ffe8e6",
-                                      "#8b7d7b",
-                                      "#8A3324",
-                                      "#C1AEA8",
-                                      "#FF5721",
-                                      "#5E2612",
-                                      "#5C4033",
-                                      "#FF6600",
-                                      "#B78D6F",
-                                      "#D0CECD",
-                                      "#FFE2C8",
-                                      "#B67C3D",
-                                      "#DFC9AC",
-                                      "#FFA114"
-                                    ]
-                }
-            ]
-        },
-        options: {
-            legend: {
-                display: true,
-                position: "bottom"
-            }
-        }
-    })
-}
-
+// a function for filling the confusion matrix head
+// OBJECT data, data from the confusion matrix api call
+// returns: VOID
 function fillTableHead(data) {
+    // get and create required elements
     let matrix = document.getElementById('confusion-matrix')
     let head = document.createElement("thead")
     let head_row = document.createElement("tr")
-
     let empty_th = document.createElement("th")
+
+    // add leftmost th to table head
     empty_th.innerHTML = "Classes"
     head_row.appendChild(empty_th)
 
-    data.forEach(function(label) {
+    // fill the rest of the tr
+    data.forEach(function (label) {
         let th = document.createElement("th")
         th.innerHTML = label
         head_row.appendChild(th)
@@ -215,96 +149,126 @@ function fillTableHead(data) {
     matrix.appendChild(head)
 }
 
-function createTableRows(label, row) {
+// function for creating a row in the confusion matrix
+// STRING label, the leftmost item of the row
+// OBJECT row, the data the row should be filled with
+// returns: 'tr' element
+function createTableRow(label, row) {
+    // create a table row
     let table_row = document.createElement("tr")
+    // fill it
     let table_label = document.createElement("th")
     table_label.innerHTML = label
     table_row.appendChild(table_label)
-    row.forEach(function(item) {
+    row.forEach(function (item) {
         let td = document.createElement("td")
         td.innerHTML = item
         table_row.appendChild(td)
     })
+    // return it
     return table_row
 }
 
-function loadProgress() {
-    getCurrentSituation().then(function(data) {
-        progbar = document.getElementById("epoch-progress")
-        percentage = data['current_situation']['epoch'] / data['current_situation']['epochs'] * 100
-        progbar.style.width = percentage + "%"
-        progbar.innerHTML = "epoch " + data['current_situation']['epoch'] + " of " + data['current_situation']['epochs']
+// function for updating the progress metrics of the current situation
+// is stored in a variable to be called at an interval
+// returns: VOID
+lp = function getProgress() {
+    // make an api caal
+    getApiData('/insight/data/current_situation').then(function (data) {
+        // if it contains a substantial ammount of data, continue, else show a message
+        if (data.length != 1) {
+            // fill the progbar accordingly
+            progbar = document.getElementById("epoch-progress")
+            percentage = data[0]['epoch'] / data[0]['epochs'] * 100
+            progbar.style.width = percentage + "%"
+            progbar.innerHTML = "epoch " + data[0]['epoch'] + " of " + data[0]['epochs']
 
-        current_accuracy = document.getElementById('current-accuracy')
-        current_accuracy.innerHTML = Math.round(data['current_situation']['acc'] * 100 * 10) / 10 + "%"
-        if(data['current_situation']['acc'] < data['previous_situation']['acc']) {
-            current_accuracy.style.color = "red"
-            current_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_accuracy.style.color = "#007F0E"
-            current_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+            // fill the current accuracy metric
+            current_accuracy = document.getElementById('current-accuracy')
+            current_accuracy.innerHTML = Math.round(data[0]['acc'] * 100 * 10) / 10 + "%"
+            checkAndColour(current_accuracy, 'acc', data)
 
-        current_validation_accuracy = document.getElementById('current-validation-accuracy')
-        current_validation_accuracy.innerHTML = Math.round(data['current_situation']['val_acc'] * 100 * 10) / 10 + "%"
-        if(data['current_situation']['val_acc'] < data['previous_situation']['val_acc']) {
-            current_validation_accuracy.style.color = "red"
-            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_validation_accuracy.style.color = "#007F0E"
-            current_validation_accuracy.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+            // fill the current validation accuracy metric 
+            current_validation_accuracy = document.getElementById('current-validation-accuracy')
+            current_validation_accuracy.innerHTML = Math.round(data[0]['val_acc'] * 100 * 10) / 10 + "%"
+            checkAndColour(current_validation_accuracy, 'val_acc', data)
 
-        current_loss = document.getElementById('current-loss')
-        current_loss.innerHTML = Math.round(data['current_situation']['loss'] * 10000) / 10000
-        if(data['current_situation']['loss'] > data['previous_situation']['loss']) {
-            current_loss.style.color = "red"
-            current_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
-        } else {
-            current_loss.style.color = "#007F0E"
-            current_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
-        }
+            // fill the current loss metric
+            current_loss = document.getElementById('current-loss')
+            current_loss.innerHTML = Math.round(data[0]['loss'] * 10000) / 10000
+            checkAndColour(current_loss, 'loss', data, true)
 
-        current_validation_loss = document.getElementById('current-validation-loss')
-        current_validation_loss.innerHTML = Math.round(data['current_situation']['val_loss'] * 10000) / 10000
-        if(data['current_situation']['val_loss'] > data['previous_situation']['val_loss']) {
-            current_validation_loss.style.color = "red"
-            current_validation_loss.innerHTML += " <i class='fas fa-angle-down'></i>"
+            // fill the current validation loss metric
+            current_validation_loss = document.getElementById('current-validation-loss')
+            current_validation_loss.innerHTML = Math.round(data[0]['val_loss'] * 10000) / 10000
+            checkAndColour(current_validation_loss, 'val_loss', data, true)
+
+            // fill the current situation graphs
+            fillCurrentSituationGraphs(data)
         } else {
-            current_validation_loss.style.color = "#007F0E"
-            current_validation_loss.innerHTML += " <i class='fas fa-angle-up'></i>"
+            document.getElementById("current-training-metrics").innerHTML = "<h1>No metrics were found</h1>"
         }
     })
 }
 
-getHistory().then(function(data) {
-    plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
-    plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
-})
+// function for filling the graphs concerning the current training process
+// OBJECT data, data from the current situation api call
+// returns: VOID
+function fillCurrentSituationGraphs(data) {
+    // metric arrays
+    let acc = []
+    let val_acc = []
+    let loss = []
+    let val_loss = []
 
-getReport().then(function(data) {
-    plotReportChart(data, 'precision', 'precision-chart')
-    plotReportChart(data, 'recall', 'recall-chart')
-    plotReportChart(data, 'f1-score', 'f-chart')
-    plotSupportChart(data)
-})
-
-getClasses().then(function(classes) {
-    fillTableHead(classes)
-    getConfusionMatrix().then(function(data) {
-        table_body = document.createElement("tbody")
-        for (let key in data) {
-            let label = classes[key]
-            let row = data[key]
-            let table_row = createTableRows(label, row)
-            table_body.appendChild(table_row)
-        }
-        document.getElementById('confusion-matrix').appendChild(table_body)
+    // fill the metric arrays
+    data.forEach(function (item){
+        acc.push(item['acc'])
+        val_acc.push(item['val_acc'])
+        loss.push(item['loss'])
+        val_loss.push(item['val_loss'])
     })
-})
 
-loadProgress()
+    // plot the current situation graphs on the metic arrays
+    plotLineChart(acc, val_acc, "Accuracy", "Validation Accuracy", 'current-accuracy-chart', true, true)
+    plotLineChart(loss, val_loss, "Loss", "Validation Loss", 'current-loss-chart')
+}
 
+// function for checking if the current situation is better than the previous situation
+// if so, colour it green
+// if not, colour it red
+// ELEMENT elem, the html element that should be coloured
+// STRING key, the key of the sub-array that should taken from the data array
+// OBJECT data, the data from the current situation api call
+// BOOL reverse, indicates if the value needs to be higher or lower then the previous situation to be coloured green
+// returns: VOID
+function checkAndColour(elem, key, data, reverse = false) {
+    // if reverse means the action should be the other way around
+    if (reverse) {
+        // if the previous situation is smaller than the current situation colour it red 
+        if (data[1][key] < data[0][key]) {
+            elem.style.color = "red"
+            elem.innerHTML += " <i class='fas fa-angle-up'></i>"
+        } else {
+            elem.style.color = "#007F0E"
+            elem.innerHTML += " <i class='fas fa-angle-down'></i>"
+        }
+    } else {
+        // if the current situation is smaller than the previous situation colour it red
+        if (data[0][key] < data[1][key]) {
+            elem.style.color = "red"
+            elem.innerHTML += " <i class='fas fa-angle-down'></i>"
+        } else {
+            elem.style.color = "#007F0E"
+            elem.innerHTML += " <i class='fas fa-angle-up'></i>"
+        }
+    }
+}
+
+// IMPORTANT: this action overwrites the standard popover evenhandler
+// function for showing or hiding the informative popovers
+// ELEMENT elem, the html element to be toggled
+// returns, VOID
 function togglePopOver(elem) {
     id = $(elem).data('bs.popover').tip.id
     popover = $("#" + id)
@@ -315,3 +279,38 @@ function togglePopOver(elem) {
     }
 }
 
+// calls that need to happen only once, when the page loads:
+
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/insight/data/history').then(function (data) {
+    plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
+    plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
+})
+
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/insight/data/report').then(function (data) {
+    plotReportChart(data, 'precision', 'precision-chart', true)
+    plotReportChart(data, 'recall', 'recall-chart', true)
+    plotReportChart(data, 'f1-score', 'f-chart', true)
+    plotReportChart(data, 'support', 'support-chart')
+})
+
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/predict/classes').then(function (classes) {
+    fillTableHead(classes)
+    getApiData('/insight/data/confusion_matrix').then(function (data) {
+        table_body = document.createElement("tbody")
+        for (let key in data) {
+            let label = classes[key]
+            let row = data[key]
+            let table_row = createTableRow(label, row)
+            table_body.appendChild(table_row)
+        }
+        document.getElementById('confusion-matrix').appendChild(table_body)
+    })
+})
+
+// load the progress for the current situation
+lp()
+// set an interval for loading the progress, every 100 seconds
+setInterval(lp, 100000)

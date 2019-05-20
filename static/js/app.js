@@ -1,12 +1,17 @@
+// function for sending the data to the predict service and using the reponse
+// returns: VOID
 function sendPredictData() {
+    // show spinner
     document.getElementById('main').classList.add("hidden")
     document.getElementById('spinner').classList.remove("hidden")
 
-
+    // fetch form data
     let input = document.getElementById('upload-input')
     let files = input.files
 
+    // if a file was inputted send the request
     if (files.length) {
+        // request settings
         let settings = {
             crossDomain: false,
             processData: false,
@@ -16,10 +21,13 @@ function sendPredictData() {
             mimeType: 'multipart/form-data'
         }
 
+        // create formdata
         let formData = new FormData()
         formData.append("image", files[0])
         settings.data = formData
 
+        // send the request and use the data to fill the result
+        // if it fails, show a message
         let response = $.ajax(settings)
             .success(function (response) {
                 decodedResponse = JSON.parse(response)
@@ -41,6 +49,8 @@ function sendPredictData() {
     }
 }
 
+// function for resetting the page to normal
+// returns: VOID
 function reset() {
     document.getElementById('spinner').classList.add("hidden")
     document.getElementById("result").classList.add("hidden")
@@ -52,6 +62,9 @@ function reset() {
     document.getElementById('categorical-select').classList.remove('hidden')
 }
 
+// function for showing the survey form
+// ELEMENT elem, the html element that containes required data
+// returns: VOID
 function showForm(elem) {
     document.getElementById('result-form').classList.add('hidden')
     if (elem.value == 1) {
@@ -64,25 +77,37 @@ function showForm(elem) {
     elem.selectedIndex = 0
 }
 
+// function for handling the negative response to the survey
+// ELEMENT elem, the html element that contains needed data
+// returns: VOID
 function negativeHandler(elem) {
     category = document.getElementById('category')
     category.value = elem.value
     sendSaveData()
 }
 
+// function for showing the 'thank you!' message
+// ELEMENT elem, the element that is to be reset
+// returns: VOID
 function showMessage(elem) {
     document.getElementById('result-negative').classList.add("hidden")
     document.getElementById('result-positive').classList.remove("hidden")
     elem.selectedIndex = 0
 }
 
+// function for filling the categorical select in the survey
+// OBJECT data, data from the get classes api call
+// returns: VOID
 function fillForm(data) {
     newData = JSON.parse(data)
     document.getElementById('category').value = newData[0]
     document.getElementById('location').value = newData[1]
 }
 
+// function for sending a request for saving the predicted image to the dataset
+// returns: VOID
 function sendSaveData() {
+    // options
     let settings = {
         crossDomain: false,
         processData: false,
@@ -92,14 +117,18 @@ function sendSaveData() {
         mimeType: 'multipart/form-data'
     }
 
+    // get values from form
     cat = document.getElementById('category').value
     loc = document.getElementById('location').value
 
+    // create form data
     let formData = new FormData()
     formData.append("category", cat)
     formData.append("location", loc)
     settings.data = formData
 
+    // send the request
+    // if it fails show a message
     $.ajax(settings)
     .success(function () {
         document.getElementById('result-positive').classList.remove('hidden')
@@ -113,7 +142,10 @@ function sendSaveData() {
     })
 }
 
+// function for filling the result form select with the classes from the get classes api call
+// returns: VOID
 function fillCategoricalSelect() {
+    // setting
     let settings = {
         crossDomain: false,
         processData: false,
@@ -122,6 +154,8 @@ function fillCategoricalSelect() {
         url: "/predict/classes",
     }
 
+    // make the ajax call
+    // if not succesfull, show a message 
     $.ajax(settings)
     .success(function (response) {
         let select = document.getElementById('categorical-select')
@@ -138,15 +172,20 @@ function fillCategoricalSelect() {
     })
 }
 
+// function containing things that need to happen only once, at the load of the page, like the translations
+// returns: VOID
 function load() {
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    
-    if(ca == null) {
-        document.cookie = "lng=en"
-    }
-
-    // fillCategoricalSelect()
+    // translate page
     translatePage()
+    // fill the select box for languages
     fillLanguageSelect()
+}
+
+// function for making a fetch api call
+// STRING route, the route to which the call is made
+// returns: OBJECT
+async function getApiData(route) {
+    let response = await fetch(route)
+    let data = await response.json()
+    return data
 }

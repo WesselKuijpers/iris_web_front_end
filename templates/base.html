@@ -23,6 +23,12 @@
     <!-- ChartJS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
+    <!-- MathJAX -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
     <!-- custom js -->
     <script src="{{ url_for('static', filename='js/translate.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

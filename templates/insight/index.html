@@ -18,7 +18,7 @@
     </div>
     <hr>
     <div class="row">
-        <div class="col-sm-12 col-lg-6">
+        <div class="col-12">
             <h3 id="insight.training-explanation.title">How does Argos IRIS work</h3>
             <p id="insight.training-explanation.content">
                 When a prediction is made using Argos IRIS and the survey is subsequently answered, new data is added to our dataset.
@@ -43,18 +43,23 @@
                 some metrics will be generated and the training process will restart. 
             </p>
         </div>
-        <div class="col-sm-12 col-lg-6">
+    </div>
+    <hr>
+    <div class="row" id="current-training-metrics">
+        <div class="col-12">
             <h3 id="insight.current-training.title">Current training</h3>
             <p id="insight.current-training.lead">
                 The model that we use to make predictions is constantly improving. The metrics below give insight into
                 the training that is currently being conducted.
             </p>
+        </div>
+        <div class="col-sm-12 col-lg-6">
             <p>
                 <strong id="insight.current-training.progress.title">Progress: </strong>
             </p>
             <div class="row">
                 <div class="col-1 text-center">
-                    <i class="fas fa-sync" onclick="loadProgress()"></i>
+                    <i class="fas fa-sync" onclick="lp()"></i>
                 </div>
                 <div class="col-11">
                     <div class="progress">
@@ -66,7 +71,7 @@
                 <strong id="insight.current-training.metrics.title">Metrics:</strong>
             </p>
             <div class="row">
-                <div class="col-lg-6 col-sm-12 mb-4">
+                <div class="col-lg-6 col-sm-12 mb-4 ">
                     <div class="card">
                         <div class="card-body text-center">
                             <h5 id="insight.current-training.metrics.accuracy">Accuracy </h5>
@@ -85,7 +90,7 @@
                             <hr>
                             <h1 id='current-accuracy'></h1>
                             <br>
-                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                            <i class="fas fa-sync" onclick="lp()"></i>
                         </div>
                     </div>
                 </div>
@@ -105,7 +110,7 @@
                             <hr>
                             <h1 id='current-validation-accuracy'></h1>
                             <br>
-                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                            <i class="fas fa-sync" onclick="lp()"></i>
                         </div>
                     </div>
                 </div>
@@ -125,7 +130,7 @@
                             <hr>
                             <h1 id='current-loss'></h1>
                             <br>
-                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                            <i class="fas fa-sync" onclick="lp()"></i>
                         </div>
                     </div>
                 </div>
@@ -143,7 +148,27 @@
                             <hr>
                             <h1 id='current-validation-loss'></h1>
                             <br>
-                            <i class="fas fa-sync" onclick="loadProgress()"></i>
+                            <i class="fas fa-sync" onclick="lp()"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Accuracy flow</h5>
+                            <canvas id="current-accuracy-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <h5>Loss flow</h5>
+                            <canvas id="current-loss-chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -253,8 +278,7 @@
                         The precision is being calculated with the following formula:
                     </p>
                     <div class="text-center">
-                        <h5 id="insight.classification-report.precision.formula">Precision = True Positives / (True
-                            Positives + False Positives)</h5>
+                            $$Precision = {True Positives \over True Positives + False Positives}$$
                     </div>
                 </div>
             </div>
@@ -277,8 +301,7 @@
                         The Recall Score is being calculated with the following formula:
                     </p>
                     <div class="text-center">
-                        <h5 id="insight.classification-report.recall.formula">Precision = True Positives / (True
-                            Positives + False Negatives)</h5>
+                        $$Recall = {True Positives \over True Positives + False Negatives}$$
                     </div>
                 </div>
             </div>
@@ -302,8 +325,7 @@
                         The F1 Score is being calculated with the following formula:
                     </p>
                     <div class="text-center">
-                        <h5 id="insight.classification-report.f1.formula">F1 = 2 x (precision x recall)/(precision +
-                            recall)</h5>
+                        $$F1 = 2 * {Precision * Recall \over Precision + Recall}$$
                     </div>
                 </div>
             </div>

@@ -175,17 +175,17 @@ function fillCategoricalSelect() {
 // function containing things that need to happen only once, at the load of the page, like the translations
 // returns: VOID
 function load() {
-    // decode the language cookie
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    
-    // if it is not present set it to english
-    if(ca == null) {
-        document.cookie = "lng=en"
-    }
-
     // translate page
     translatePage()
     // fill the select box for languages
     fillLanguageSelect()
+}
+
+// function for making a fetch api call
+// STRING route, the route to which the call is made
+// returns: OBJECT
+async function getApiData(route) {
+    let response = await fetch(route)
+    let data = await response.json()
+    return data
 }

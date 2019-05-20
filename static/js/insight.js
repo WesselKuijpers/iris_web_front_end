@@ -1,46 +1,3 @@
-// async funtions for fetching the required data
-// TODO: condense these functions
-
-// history
-// returns: OBJECT
-async function getHistory() {
-    let response = await fetch('/insight/data/history')
-    let data = await response.json()
-    return data
-}
-
-// classification report
-// returns: OBJECT
-async function getReport() {
-    let response = await fetch('/insight/data/report')
-    let data = await response.json()
-    return data
-}
-
-// predict classes
-// returns: OBJECT
-async function getClasses() {
-    let response = await fetch('/predict/classes')
-    let data = await response.json()
-    return data
-}
-
-//confusion matrix
-// returns: OBJECT
-async function getConfusionMatrix() {
-    let response = await fetch('/insight/data/confusion_matrix')
-    let data = await response.json()
-    return data
-}
-
-// current training data
-// returns: OBJECT
-async function getCurrentSituation() {
-    let response = await fetch('/insight/data/current_situation')
-    let data = await response.json()
-    return data
-}
-
 // function for plotting a line chart for history objects
 // takes:
 // OBJECT train, train data
@@ -215,9 +172,9 @@ function createTableRow(label, row) {
 // function for updating the progress metrics of the current situation
 // is stored in a variable to be called at an interval
 // returns: VOID
-lp = function loadProgress() {
+lp = function getProgress() {
     // make an api caal
-    getCurrentSituation().then(function (data) {
+    getApiData('/insight/data/current_situation').then(function (data) {
         // if it contains a substantial ammount of data, continue, else show a message
         if (data.length != 1) {
             // fill the progbar accordingly
@@ -324,24 +281,24 @@ function togglePopOver(elem) {
 
 // calls that need to happen only once, when the page loads:
 
-// call the getHistory api call and call the required functions with the data it returns
-getHistory().then(function (data) {
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/insight/data/history').then(function (data) {
     plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
     plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
 })
 
-// call the getReport api call and call the required functions with the data it returns
-getReport().then(function (data) {
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/insight/data/report').then(function (data) {
     plotReportChart(data, 'precision', 'precision-chart', true)
     plotReportChart(data, 'recall', 'recall-chart', true)
     plotReportChart(data, 'f1-score', 'f-chart', true)
     plotReportChart(data, 'support', 'support-chart')
 })
 
-// call the getClasses api call and call the required functions with the data it returns
-getClasses().then(function (classes) {
+// call the getApiData api call and call the required functions with the data it returns
+getApiData('/predict/classes').then(function (classes) {
     fillTableHead(classes)
-    getConfusionMatrix().then(function (data) {
+    getApiData('/insight/data/confusion_matrix').then(function (data) {
         table_body = document.createElement("tbody")
         for (let key in data) {
             let label = classes[key]

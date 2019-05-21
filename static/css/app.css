@@ -176,3 +176,13 @@ th {
 .green {
     color: green;
 }
+
+.relative-card-body {
+    position: relative;
+}
+
+.absolute-select {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

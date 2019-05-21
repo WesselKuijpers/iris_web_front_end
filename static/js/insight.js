@@ -9,6 +9,9 @@
 // BOOL startAtZero, specify if the charts Y-axis should start at 0
 // returns: VOID
 function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false, startAtZero = false) {
+    // remove and re-instate the canvas to preven the 'hover bug'
+    $('#' + id).remove()
+    $('#' + id + '-container').append('<canvas id="' + id + '"><canvas>')
     let chart = document.getElementById(id).getContext('2d');
 
     // if the percentage bool is true convert it to percentages
@@ -80,24 +83,36 @@ function plotLineChart(train, val, trainLabel, valLabel, id, percentage = false,
 // STRING id, the id of the canvas that should be a chart
 // BOOL percentage, whether the data from the json_data should be converted to a percentage
 // returns: VOID
-function plotReportChart(json_data, data_key, id, percentage = false) {
+function plotReportChart(json_data, data_key, id, percentage = false, direction='desc') {
+    // delete data from the json we do not wish to show
+    delete json_data['micro avg']
+    delete json_data['macro avg']
+    delete json_data['weighted avg']
+
+    // remove and re-instate the canvas to preven the 'hover bug'
+    $('#' + id).remove()
+    $('#' + id + '-container').append('<canvas id="' + id + '"><canvas>')
+
     let chart = document.getElementById(id).getContext('2d');
 
     keys = []
-    data = []
 
-    // fill the keys and data arrays with the required data
-    for (let key in json_data) {
-        if (key != 'macro avg' && key != 'micro avg' && key != 'weighted avg') {
-            keys.push(key)
-            if (percentage) {
-                data.push(json_data[key][data_key] * 100)
-            } else {
-                data.push(json_data[key][data_key])
-            }
+    data = Object.keys(json_data).sort(function (a, b) {
+        if (direction == 'desc') {
+            return json_data[b][data_key] - json_data[a][data_key]
+        } else if (direction == 'asc') {
+            return json_data[a][data_key] - json_data[b][data_key]
         }
-    }
+    }).map(key => (keys.push(key), json_data[key][data_key]))
 
+    if (percentage) {
+        percentage_data = []
+        for (let item in data) {
+            percentage_data.push(data[item] * 100)
+        }
+        data = percentage_data
+    }
+    
     // plot the chart
     let myChart = new Chart(chart, {
         type: 'bar',
@@ -222,7 +237,7 @@ function fillCurrentSituationGraphs(data) {
     let val_loss = []
 
     // fill the metric arrays
-    data.forEach(function (item){
+    data.forEach(function (item) {
         acc.push(item['acc'])
         val_acc.push(item['val_acc'])
         loss.push(item['loss'])
@@ -277,6 +292,12 @@ function togglePopOver(elem) {
     } else {
         popover.addClass('hidden')
     }
+}
+
+function setGraphSort(dataKey, id, percentage, direction) {
+    getApiData('/insight/data/report').then(function (data) {
+        plotReportChart(data, dataKey, id, percentage, direction)
+    })
 }
 
 // calls that need to happen only once, when the page loads:

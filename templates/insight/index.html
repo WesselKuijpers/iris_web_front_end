@@ -160,7 +160,9 @@
                     <div class="card">
                         <div class="card-body">
                             <h5>Accuracy flow</h5>
-                            <canvas id="current-accuracy-chart"></canvas>
+                            <div id="current-accuracy-chart-container">
+                                <canvas id="current-accuracy-chart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,7 +170,9 @@
                     <div class="card mt-2">
                         <div class="card-body">
                             <h5>Loss flow</h5>
-                            <canvas id="current-loss-chart"></canvas>
+                            <div id="current-loss-chart-container">
+                                <canvas id="current-loss-chart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,7 +205,9 @@
                         better, in percentage</h6>
                     <br>
                     <div class="text-center">
-                        <canvas id="accuracy-chart"></canvas>
+                        <div id="accuracy-chart-container">
+                            <canvas id="accuracy-chart"></canvas>
+                        </div>
                     </div>
                     <hr>
                     <p class="card-text" id="insight.accuracy-and-loss.accuracy.explanation">
@@ -218,7 +224,9 @@
                         better</h6>
                     <br>
                     <div class="text-center">
-                        <canvas id="loss-chart"></canvas>
+                        <div id="loss-chart-container">
+                            <canvas id="loss-chart"></canvas>
+                        </div>
                     </div>
                     <hr>
                     <p class="card-text" id="insight.accuracy-and-loss.loss.explanation">
@@ -248,13 +256,18 @@
         </div>
         <div class="col-12 mt-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body relative-card-body">
                     <h5 class="card-title" id="insight.classification-report.support.title">Support</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.support.subtitle">How
-                        many images exist inside each category of the test set</h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.support.subtitle">
+                        How many images exist inside each category of the test set
+                    </h6>
+                    <select onchange="setGraphSort('support', 'support-chart', false, this.value)" class='absolute-select'>
+                        <option value="desc">desc</option>
+                        <option value="asc">asc</option>
+                    </select>
                     <br>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" id='support-chart-container'>
                             <canvas id="support-chart"></canvas>
                         </div>
                     </div>
@@ -263,12 +276,17 @@
         </div>
         <div class="col-12 mt-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body relative-card-body">
                     <h5 class="card-title" id="insight.classification-report.precision.title">Per class precision</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.precision.subtitle">in
-                        percentages</h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.precision.subtitle">
+                        in percentages
+                    </h6>
+                    <select onchange="setGraphSort('precision', 'precision-chart', true, this.value)" class='absolute-select'>
+                        <option value="desc">desc</option>
+                        <option value="asc">asc</option>
+                    </select>
                     <br>
-                    <div class="text-center">
+                    <div class="text-center" id='precision-chart-container'>
                         <canvas id="precision-chart"></canvas>
                     </div>
                     <hr>
@@ -285,12 +303,17 @@
         </div>
         <div class="col-12 mt-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body relative-card-body">
                     <h5 class="card-title" id="insight.classification-report.recall.title">Per class recal score</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.recall.subtitle">in
-                        percentages</h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.recall.subtitle">
+                        in percentages
+                    </h6>
+                    <select onchange="setGraphSort('recall', 'recall-chart', true, this.value)" class='absolute-select'>
+                        <option value="desc">desc</option>
+                        <option value="asc">asc</option>
+                    </select>
                     <br>
-                    <div class="text-center">
+                    <div class="text-center" id='recall-chart-container'>
                         <canvas id="recall-chart"></canvas>
                     </div>
                     <hr>
@@ -308,12 +331,17 @@
         </div>
         <div class="col-12 mt-4">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body relative-card-body">
                     <h5 class="card-title" id="insight.classification-report.f1.title">Per class F1 score</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.f1.subtitle">in
-                        percentages</h6>
+                    <h6 class="card-subtitle mb-2 text-muted" id="insight.classification-report.f1.subtitle">
+                        in percentages
+                    </h6>
+                    <select onchange="setGraphSort('f1-score', 'f-chart', true, this.value)" class='absolute-select'>
+                        <option value="desc">desc</option>
+                        <option value="asc">asc</option>
+                    </select>
                     <br>
-                    <div class="text-center">
+                    <div class="text-center" id='f-chart-container'>
                         <canvas id="f-chart"></canvas>
                     </div>
                     <hr>
@@ -345,7 +373,7 @@
         </div>
         <div class="col-12">
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body relative-card-body">
                     <h5 class="card-title" id="insight.confusion-matrix.table.title">Confusion Matrix</h5>
                     <h6 class="card-subtitle mb-2 text-muted" id="insight.confusion-matrix.table.subtitle">
                         A matrix, labeled by class

@@ -3,9 +3,6 @@
 function translatePage() {
     var lng = getLanguageCookie()
 
-    console.log("inside translatepage")
-    console.log(lng)
-
     // get the translation by the formatted cookie and replacing the element by key
     getApiData('/translate/').then(function (data) {
         let curr_language = data[lng]["translations"]
@@ -69,8 +66,6 @@ function getLanguageCookie() {
         }
     }
 
-    console.log("inside get language cookie")
-    console.log(lng)
     return lng
 }
 

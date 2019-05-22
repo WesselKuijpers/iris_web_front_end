@@ -4,7 +4,7 @@ import keras.backend as K
 import tensorflow as tf
 from flask import Flask
 
-from fruit_iris_core.error_handler import errors
+from iris_core.error_handler import errors
 from helpers.predict_helper import PredictHelper
 
 
@@ -39,7 +39,6 @@ class Server:
             print("SERVER: STARTED")
             return self.app
         except:
-            print("AN ERROR OCCURED")
             raise
 
     # method for loading the PredictHelper() class into the application context
@@ -51,7 +50,7 @@ class Server:
         self.app.helper = PredictHelper()
 
         # load the model
-        self.app.helper.load_model('fruit_iris_core/models/mobilenet.h5py')
+        self.app.helper.load_model('iris_core/models/mobilenet.h5py')
 
         # if the model is loaded, let the sun shine, else let the user know an error occured
         if(self.app.helper.model):
@@ -82,7 +81,7 @@ class Server:
             print("ERROR: FILECACHE COULD NOT BE CLEANED")
             return False
 
-    # method for registering the error handlers in the 'fruit_iris_core/error_handler.py' file
+    # method for registering the error handlers in the 'iris_core/error_handler.py' file
     # returns: VOID
     def register_error_handlers(self):
         # register the error handler

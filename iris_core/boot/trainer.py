@@ -9,7 +9,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import classification_report, confusion_matrix
 
-from fruit_iris_core.callbacks.SaveSituations import SaveSituations
+from iris_core.callbacks.SaveSituations import SaveSituations
 from helpers.predict_helper import PredictHelper
 
 
@@ -87,7 +87,7 @@ class Trainer:
     # returns: keras.models.Model
     def load_model(self):
         helper = PredictHelper()
-        helper.load_model('fruit_iris_core/models/mobilenet.h5py')
+        helper.load_model('iris_core/models/mobilenet.h5py')
         return helper.model
 
     # method for creating the train ImageDataGenerator
@@ -164,7 +164,7 @@ class Trainer:
     # returns: DICT
     def train(self, model, train_generator, validation_generator):
         # callbacks
-        checkpoint = ModelCheckpoint('fruit_iris_core/models/mobilenet.h5py', monitor='val_acc',
+        checkpoint = ModelCheckpoint('iris_core/models/mobilenet.h5py', monitor='val_acc',
                                      verbose=1, save_best_only=False, mode='max', save_weights_only=False)
         save_situations = SaveSituations(epochs=self.epochs)
 
@@ -231,7 +231,7 @@ class Trainer:
     # method for generating and saving a classification report
     # returns: VOID
     def save_classification_report(self):
-        with open('fruit_iris_core/classes.json', 'r') as file:
+        with open('iris_core/classes.json', 'r') as file:
             classes = json.load(file)
 
         cr = classification_report(

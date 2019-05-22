@@ -109,4 +109,4 @@ venv.bak/
 /static/img/cache/*
 /dataset/*/*
 /static/model_history/*
-/fruit_iris_core/models/*
+/iris_core/models/*

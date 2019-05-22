@@ -17,7 +17,7 @@ predict_controller = Blueprint('predict_controller', __name__)
 # method: POST
 @predict_controller.route('/', methods=['POST'])
 def predict_index():
-    with open('fruit_iris_core/classes.json', 'r') as file:
+    with open('iris_core/classes.json', 'r') as file:
         classes = json.load(file)
 
     try:
@@ -44,10 +44,10 @@ def predict_index():
         abort(503)
 
 # route: '/predict/classes'
-# returns: json response containing the dataset classes read from the 'fruit_iris_core/classes.json' -file
+# returns: json response containing the dataset classes read from the 'iris_core/classes.json' -file
 @predict_controller.route('/classes')
 def get_classes():
-    with open('fruit_iris_core/classes.json', 'r') as file:
+    with open('iris_core/classes.json', 'r') as file:
         classes = json.load(file)
     return jsonify(classes)
 

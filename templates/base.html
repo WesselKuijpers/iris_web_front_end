@@ -44,55 +44,63 @@
 </head>
 
 <body id='body' onload="load()">
-    <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">
-            <div class="bg-dark p-4">
-                <h5 class="text-white h4">Argos IRIS</h5>
-                <a class="text-white nav-link" id="base.navbar.link.home" href="/">Home</a>
-                <a class="text-white nav-link" id="base.navbar.link.insight" href="/insight">Insights</a>
-                <a class="text-white nav-link" id="base.navbar.link.rate" href="/rate">Rate</a>
+    <div class="page-container">
+        <div class="pos-f-t">
+            <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-dark p-4">
+                    <h5 class="text-white h4">Argos IRIS</h5>
+                    <a class="text-white nav-link" id="base.navbar.link.home" href="/">Home</a>
+                    <a class="text-white nav-link" id="base.navbar.link.insight" href="/insight">Insights</a>
+                    <a class="text-white nav-link" id="base.navbar.link.rate" href="/rate">Rate</a>
 
+                </div>
             </div>
+            <nav class="navbar navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span><i class="fas fa-bars menu-icon"></i></span>
+                </button>
+                <div class="col-5 col-lg-2">
+                    <select class="form-control" onchange="setLanguage(this.value)" id="language-select">
+                    </select>
+                </div>
+            </nav>
         </div>
-        <nav class="navbar navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span><i class="fas fa-bars menu-icon"></i></span>
-            </button>
-            <div class="col-5 col-lg-2">
-                <select class="form-control" onchange="setLanguage(this.value)" id="language-select">
-                </select>
+
+        <div class="content-wrap">
+            {% block content %}{% endblock %}
+        </div>
+
+        <footer id="footer" class="footer">
+            <div class="container footer-container">
+                <div class="row footer-row">
+                    <div class="col-5">
+                        <h6 class="text-titel"><strong> CONTACT DETAILS </strong></h6>
+                        <p class="text">
+                            <strong>
+                                Stachanov<br>
+                                Solutions &amp; Services BV<br>
+                                Lamonggracht 7<br>
+                                1019 RD Amsterdam<br>
+                                The Netherlands<br>
+                                T: +31 20 509 10 10<br>
+                                E-mail: info@stachanov.com
+                            </strong>
+                        </p>
+                    </div>
+                    <div class="col-4 copy-box">
+                        <strong class="mt-4 copy-box-text">© Copyright 2019 Stachanov (v1.0). All rights reserved | General
+                            terms of
+                            service</strong>
+                    </div>
+                    <div class="col-3 argos-box">
+                        <img class='argos-image' src="{{ url_for('static', filename='img/argos.png') }}">
+                    </div>
+                </div>
             </div>
-        </nav>
+        </footer>
     </div>
-
-
-    {% block content %}{% endblock %}
-
 </body>
-
-<footer id="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-5">
-                <h6 class="text-titel"><strong> CONTACT DETAILS </strong></h6>
-                <p class="text"><strong>Solutions &amp; Services BV<br>
-                        Lamonggracht 7<br>
-                        1019 RD Amsterdam<br>
-                        The Netherlands<br>
-                        T: +31 20 509 10 10<br>
-                        E-mail: info@stachanov.com</strong></p>
-            </div>
-            <div class="col-4 copy-box">
-                <strong class="mt-4 copy-box-text">© Copyright 2019 Stachanov (v1.0). All rights reserved | General terms of
-                    service</strong>
-            </div>
-            <div class="col-3 argos-box">
-                <img class='argos-image' src="{{ url_for('static', filename='img/argos.png') }}">
-            </div>
-        </div>
-    </div>
-</footer>
 
 </html>

@@ -190,13 +190,17 @@ function createTableRow(label, row) {
 lp = function getProgress() {
     // make an api caal
     getApiData('/insight/data/current_situation').then(function (data) {
+        document.getElementById("current-training-metrics").classList.remove('hidden')
+        document.getElementById("metrics-not-found-message").classList.add('hidden')
         // if it contains a substantial ammount of data, continue, else show a message
         if (data.length != 1) {
             // fill the progbar accordingly
             progbar = document.getElementById("epoch-progress")
             percentage = data[0]['epoch'] / data[0]['epochs'] * 100
-            progbar.style.width = percentage + "%"
-            progbar.innerHTML = "epoch " + data[0]['epoch'] + " of " + data[0]['epochs']
+            if (progbar != null) {
+                progbar.style.width = percentage + "%"
+                progbar.innerHTML = "epoch " + data[0]['epoch'] + " of " + data[0]['epochs']
+            }
 
             // fill the current accuracy metric
             current_accuracy = document.getElementById('current-accuracy')
@@ -221,7 +225,8 @@ lp = function getProgress() {
             // fill the current situation graphs
             fillCurrentSituationGraphs(data)
         } else {
-            document.getElementById("current-training-metrics").innerHTML = "<h1>No metrics were found</h1>"
+            document.getElementById("current-training-metrics").classList.add('hidden')
+            document.getElementById("metrics-not-found-message").classList.remove('hidden')
         }
     })
 }

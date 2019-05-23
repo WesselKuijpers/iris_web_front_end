@@ -107,6 +107,6 @@ venv.bak/
 /.vscode
 
 /static/img/cache/*
-/dataset/*/*
+/dataset/train/*
 /static/model_history/*
 /iris_core/models/*

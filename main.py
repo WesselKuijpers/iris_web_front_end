@@ -5,7 +5,7 @@ from iris_core.boot.server import Server
 from iris_core.boot.trainer import Trainer
 from router import Router
 
-# this file covers everything that needs to happen only once
+# this file covers everything that needs to happen only once, when the app starts
 # the sequence in this file is very important because of keras sessions
 
 # boolean, can be flipped to indicate that the trainingprocesss should start

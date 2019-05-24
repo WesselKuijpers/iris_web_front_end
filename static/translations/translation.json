@@ -57,7 +57,8 @@
             "insight.training-explanation.title": "How does Argos IRIS work",
             "insight.training-explanation.content": "When a prediction is made using Argos IRIS and the survey is subsequently answered, new data is added to our dataset. This data in itself is not improving the model yet. The model (needed to make predictions) needs to update itself with the new knowledge. To do this a so-called training process is started.  <br> This process runs continuously, and asyncronously with our prediction service so that the user experience is not hindered in any way. <br><br> The model that we use is a deeply trained MobileNet model. This model is made out of several layers with their own responsibility. <br> When a prediction is made a single image is passed through these layers and a so-called 'feature map' is created containing indexes of similarity with known patterns. This 'feature map' will be compared with known classes and based on that a prediction will be given. <br><br> During a training process a stream of images is fed into the model, again, the model makes a prediction per image. Now the correct label is also given to the model. <br> The model can now update it's 'weights' so that the patterns that were discerned in the image can be used to recognise images of the same class in the future. This process continues, and so the model 'learns' new patterns. <br> This process repeats for each image in the dataset, and for 100 iterations (or Epochs). After this process is completed the model will be loaded into the prediction service, some metrics will be generated and the training process will restart. "
         },
-        "fullname": "English"
+        "fullname": "English",
+        "force_rtl": false
     },
     "nl": {
         "translations": {
@@ -117,7 +118,8 @@
             "insight.training-explanation.title": "Hoe werkt Argos IRIS",
             "insight.training-explanation.content": "Wanneer er een voorspelling gemaakt wordt met Argos IRIS en de enquete wordt beantwoord wordt er nieuwe data aan onze dataset toegevoegd. Deze nieuwe data op zich verbeterd het model nog niet. Het model (hiermee worden de voorspellingen gemaakt) moet geupdate worden met de nieuwe data. Om deze reden wordt een nieuw train-proces gestart. <br> Dit proces loopt continue, en asynchroon met onze voorspelservice zodat het gebruik van Argos IRIS niet wordt verhinderd. <br><br>Het model waar wij gebruik van maken is een diep getraind MobileNet model. Dit model bestaat uit verschillende lagen, elk met zijn eigen verantwoordelijkheid. <br> Wanneer er een voorspelling wordt gemaakt wordt er aan de hand van bekende patronen een zogenaamde 'feature map' gercreeerd met indexen van overeenkomst met bekende klassen. deze 'feature map' wordt vergeleken met bekende klassen om zo een voorspelling te kunnen doen. <br><br> Gedurende een training-proces wordt er een stroom van afbeeldingen aan het model gegeven, wederom doet het model per afbeelding een voorspelling. In deze situatie wordt het correcte label ook met de afbeelding meegegeven. <br> zo kan het model zijn 'weights' updaten zodat patronen die uit de afbeelding gehaald zijn gebruikt kunnen worden om afbeeldingen van dezelfde klasse te herkennen in de toekomst. Dit proces loopt door en zo leert het model nieuwe patronen. <br> Dit proces loopt door voor elke afbeelding in de dataset, en voor 100 iteraties (of Epochs). Wanneer dit process klaar is wordt het nieuwe model ingeladen, een paar statistieken worden gegenereerd en het train-proces wordt opnieuw gestart. "
         },
-        "fullname": "Nederlands"
+        "fullname": "Nederlands",
+        "force_rtl": false
     },
     "fr": {
         "translations": {
@@ -177,7 +179,8 @@
             "insight.training-explanation.title": "Comment fonctionne Argos IRIS",
             "insight.training-explanation.content": "Lorsqu'une prévision est faite à l'aide d'Argos IRIS et que l'on répond ensuite à l'enquête, de nouvelles données sont ajoutées à notre ensemble de données. Ces données en elles-mêmes n'améliorent pas encore le modèle. Le modèle (nécessaire pour faire des prévisions) doit se mettre à jour avec les nouvelles connaissances. Pour ce faire, un processus de formation est démarré. <br> Ce processus fonctionne en permanence et de manière asynchrone avec notre service de prévision, de sorte que l'expérience utilisateur ne soit aucunement entravée. <br> <br> Le modèle que nous utilisons est un modèle MobileNet profondément formé. Ce modèle est composé de plusieurs couches avec leur propre responsabilité. <br> Quand une prédiction est faite, une seule image est passée à travers ces couches et une 'carte de caractéristiques' est créée, contenant des index de similarité avec des modèles connus. Cette 'carte de caractéristiques' sera comparée aux classes connues et sera basée sur une prédiction. <br> <br> Au cours d'un processus de formation, un flux d'images est introduit dans le modèle. De nouveau, le modèle effectue une prédiction par image. Maintenant, l'étiquette correcte est également donnée au modèle. <br> Le modèle peut maintenant mettre à jour ses 'poids' de sorte que les modèles qui ont été discernés dans l'image puissent être utilisés pour reconnaître des images de la même classe à l'avenir. Ce processus se poursuit et le modèle «apprend» ainsi de nouveaux modèles. <br> Ce processus se répète pour chaque image du jeu de données et pour 100 itérations (ou Epochs). Une fois ce processus terminé, le modèle sera chargé dans le service de prévision, des mesures seront générées et le processus de formation redémarrera."
         },
-        "fullname": "Français"
+        "fullname": "Français",
+        "force_rtl": false
     },
     "ar": {
         "translations": {
@@ -237,6 +240,7 @@
             "insight.training-explanation.title": "ARGOS IRIS كيف يعمل",
             "insight.training-explanation.content": "عندما يتم إجراء تنبؤ باستخدام Argos IRIS ويتم الرد على الاستطلاع ، تتم إضافة بيانات جديدة إلى مجموعة البيانات الخاصة بنا هذه البيانات الجديدة في حد ذاتها لا تحسن النموذج يجب تحديث النموذج (الذي يتم به التنبؤات) بالبيانات الجديدة لهذا السبب ، بدأت عملية قطار جديدة <br> هذه العملية مستمرة وغير متزامنة مع خدمة التنبؤ الخاصة بنا بحيث لا يتم منع استخدام Argos IRIS <br> <br> النموذج الذي نستخدمه هو نموذج MobileNet مدرّب بعمق يتكون هذا النموذج من طبقات مختلفة ، تتحمل كل منها مسؤوليتها الخاصة <br> عند إجراء تنبؤ ، يتم عرض خريطة معالم ما يسمى بفهارس المراسلات مع الفئات المعروفة بناءً على أنماط معروفة تتم مقارنة خريطة الميزات هذه مع الفئات المعروفة لتكون قادرة على عمل تنبؤ <br> <br> أثناء عملية التدريب ، يتم إعطاء دفق من الصور إلى النموذج ، ومرة ​​أخرى يقوم النموذج بعمل تنبؤ لكل صورة في هذه الحالة ، يتم تضمين التسمية الصحيحة أيضًا في الصورة <br> حتى يتمكن النموذج من تحديث أوزانه بحيث يمكن استخدام الأنماط المأخوذة من الصورة للتعرف على الصور من نفس الفئة في المستقبل تستمر هذه العملية ويتعلم النموذج أنماطًا جديدة <br> تستمر هذه العملية لكل صورة في مجموعة البيانات ، ولمائة تكرار (أو عصر) عند الانتهاء من هذه العملية ، يتم تحميل النموذج الجديد ، ويتم إنشاء عدد قليل من الإحصائيات وإعادة تشغيل عملية القطار "
         },
-        "fullname": "العربية"
+        "fullname": "العربية",
+        "force_rtl": true
     }
 }

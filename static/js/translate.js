@@ -5,13 +5,21 @@ function translatePage() {
 
     // get the translation by the formatted cookie and replacing the element by key
     getApiData('/translate/').then(function (data) {
-        let curr_language = data[lng]["translations"]
+        let curr_language = data[lng]
 
-        for (let item in curr_language) {
+        for (let item in curr_language["translations"]) {
             elem = document.getElementById(item)
             if (elem != null) {
-                elem.innerHTML = curr_language[item]
+                elem.innerHTML = curr_language["translations"][item]
             }
+        }
+
+        if (curr_language["force_rtl"]) {
+            document.getElementById('body').style.textAlign = "right"
+            document.dir = "rtl"
+        } else {
+            document.getElementById('body').style.textAlign = "left"
+            document.dir = "ltr"
         }
     })
 }

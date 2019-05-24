@@ -189,7 +189,7 @@ function createTableRow(label, row) {
 // returns: VOID
 lp = function getProgress() {
     // make an api caal
-    getApiData('/insight/data/current_situation').then(function (data) {
+    getApiData('http://localhost:5000/insight/data/current_situation').then(function (data) {
         document.getElementById("current-training-metrics").classList.remove('hidden')
         document.getElementById("metrics-not-found-message").classList.add('hidden')
         // if it contains a substantial ammount of data, continue, else show a message
@@ -300,7 +300,7 @@ function togglePopOver(elem) {
 }
 
 function setGraphSort(dataKey, id, percentage, direction) {
-    getApiData('/insight/data/report').then(function (data) {
+    getApiData('http://localhost:5000/insight/data/report').then(function (data) {
         plotReportChart(data, dataKey, id, percentage, direction)
     })
 }
@@ -308,13 +308,13 @@ function setGraphSort(dataKey, id, percentage, direction) {
 // calls that need to happen only once, when the page loads:
 
 // call the getApiData api call and call the required functions with the data it returns
-getApiData('/insight/data/history').then(function (data) {
+getApiData('http://localhost:5000/insight/data/history').then(function (data) {
     plotLineChart(data['loss'], data['val_loss'], 'loss', 'validation loss', 'loss-chart')
     plotLineChart(data['acc'], data['val_acc'], 'accuracy', 'validation accuracy', 'accuracy-chart', true, true)
 })
 
 // call the getApiData api call and call the required functions with the data it returns
-getApiData('/insight/data/report').then(function (data) {
+getApiData('http://localhost:5000/insight/data/report').then(function (data) {
     plotReportChart(data, 'precision', 'precision-chart', true)
     plotReportChart(data, 'recall', 'recall-chart', true)
     plotReportChart(data, 'f1-score', 'f-chart', true)
@@ -322,9 +322,9 @@ getApiData('/insight/data/report').then(function (data) {
 })
 
 // call the getApiData api call and call the required functions with the data it returns
-getApiData('/predict/classes').then(function (classes) {
+getApiData('http://localhost:5000/predict/classes').then(function (classes) {
     fillTableHead(classes)
-    getApiData('/insight/data/confusion_matrix').then(function (data) {
+    getApiData('http://localhost:5000/insight/data/confusion_matrix').then(function (data) {
         table_body = document.createElement("tbody")
         for (let key in data) {
             let label = classes[key]

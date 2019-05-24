@@ -9,7 +9,7 @@ from router import Router
 # the sequence in this file is very important because of keras sessions
 
 # boolean, can be flipped to indicate that the trainingprocesss should start
-start_trainer = False
+start_trainer = True
 start_server = True
 
 # TRAINER:

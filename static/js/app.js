@@ -17,7 +17,7 @@ function sendPredictData() {
             processData: false,
             contentType: false,
             type: 'POST',
-            url: "http://localhost:5000/predict/",
+            url: "http://192.168.0.178:5000/predict/",
             mimeType: 'multipart/form-data'
         }
 
@@ -32,7 +32,7 @@ function sendPredictData() {
             .success(function (response) {
                 decodedResponse = JSON.parse(response)
 
-                document.getElementById('result-img').innerHTML = "<img src='http://localhost:5000/" + decodedResponse[1] + "'>"
+                document.getElementById('result-img').innerHTML = "<img src='http://192.168.0.178:5000/" + decodedResponse[1] + "'>"
                 document.getElementById('result-text').innerHTML = decodedResponse[0]
 
                 document.getElementById('spinner').classList.add('hidden')
@@ -113,7 +113,7 @@ function sendSaveData() {
         processData: false,
         contentType: false,
         type: 'POST',
-        url: "http://localhost:5000/predict/save",
+        url: "http://192.168.0.178:5000/predict/save",
         mimeType: 'multipart/form-data'
     }
 
@@ -151,7 +151,7 @@ function fillCategoricalSelect() {
         processData: false,
         contentType: false,
         type: 'GET',
-        url: "http://localhost:5000/predict/classes",
+        url: "http://192.168.0.178:5000/predict/classes",
     }
 
     // make the ajax call

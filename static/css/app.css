@@ -70,6 +70,7 @@ a:hover {
 
 .text {
     color: black;
+    margin: 0 !important;
 }
 
 .text-titel {
@@ -128,6 +129,16 @@ select {
     position: relative;
 }
 
+.contact-box {
+    position: relative;
+}
+
+.contact-box-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
 .argos-image {
     position: absolute;
     bottom: 10px !important;
@@ -178,11 +189,11 @@ th {
     width: 100%;
     background-color: #18181840;
     font-size: 13px;
-    height: 300px;
+    height: 225px;
 }
 
 .content-wrap {
-    padding-bottom: 300px;
+    padding-bottom: 225px;
 }
 
 .footer-row {
